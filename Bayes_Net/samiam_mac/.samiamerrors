@@ -1,0 +1,5 @@
+SamIam launch command "/usr/pubsw/bin/java -Xms8m -Xmx512m -classpath ./samiam.jar:./inflib.jar edu.ucla.belief.ui.UI "
+SamIam launched by "./runsamiam"
+There was an error setting the look and feel:
+There was an error setting the look and feel:
+There was an error setting the look and feel:
