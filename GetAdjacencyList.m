@@ -11,10 +11,26 @@
 
 function [pairs] = GetAdjacencyList(SPs)
   pairs = cell(0);
-  %spLabels is a list of all the superpixel labels
-  spLabels = unique(SPs);
   
-  %%%YOUR CODE HERE
+  %pairs = {[], []};
+  %spLabels is a list of all the superpixel labels
+  %spLabels = unique(SPs);
+  
+  
+  counter = 1;
+  
+  
+  adjacency = GetSuperpixelAdjacencies(SPs);
+  for i=1:size(adjacency, 1)
+      for j=i:size(adjacency, 2)
+        if(adjacency(i,j) == 1)
+           pairs{counter} = [i,j];
+           counter = counter + 1;
+        end
+      end
+  end
+ 
+  
 
   %%%
 
