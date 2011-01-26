@@ -21,9 +21,9 @@ function [energies] = CreateObjectSPEnergy(SPs,theSP,bb,segm_params,weight)
 
   energies = zeros(2,8);
   
-  %%% YOUR CODE HERE -- fill energy matrix
-
+  c = CalculateObjectCoverage(SPs,theSP,bb);
+  energies(2, :) = c*weight;
+  energies(2, 8) = 0;
   
-  %%% END YOUR CODE
 
 end

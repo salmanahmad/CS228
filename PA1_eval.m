@@ -5,7 +5,7 @@ imgNum = 4;  %default 4
 %superpixel mode
 SPnum = 0; %Set to 0 for just pixels, 1-4 for increasingly large superpixels
 %potts factor weight
-potts_lambda = .1; %default .1 was 0
+potts_lambda = .3; %default .1 was 0
 %contrast weighting
 contrast_lambda = 0; %default .0001 was 0
 %user defined energy weighting

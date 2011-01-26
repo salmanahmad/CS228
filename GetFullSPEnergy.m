@@ -19,7 +19,7 @@ energies(1,[2 3 4 5 6 7]) = 1;
 %%tree energies
 energies(2,[3 4 5]) = 1;
 %%road energies
-energies(3,[]) = 1;
+energies(3, 5) = 1;
 %%grass energies
 energies(4, 5) = 1;
 %%water energies
