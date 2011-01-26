@@ -16,9 +16,7 @@ function [pairs] = GetAdjacencyList(SPs)
   %spLabels is a list of all the superpixel labels
   %spLabels = unique(SPs);
   
-  
   counter = 1;
-  
   
   adjacency = GetSuperpixelAdjacencies(SPs);
   for i=1:size(adjacency, 1)
@@ -28,11 +26,6 @@ function [pairs] = GetAdjacencyList(SPs)
            counter = counter + 1;
         end
       end
-  end
+    end
  
-  
-
-  %%%
-
-
 end

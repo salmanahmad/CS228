@@ -17,9 +17,24 @@
 function [energies] = GetContrastFactor(potts_weight,contrast_lambda,p1,p2,...
   theImg,SPs,segm_params)
 
-  energies = zeros(segm_params.LK);
+    %energies = zeros(segm_params.LK);
+
+    c = GetPairwiseContrast(theImg,SPs,p1,p2);
+    energies = (ones(segm_params.LK) - eye(segm_params.LK)) * potts_weight*exp(-contrast_lambda*c);
+    
   
   %%%YOUR CODE HERE
+   %for i=1:size(energies,1)
+   %   for j=1:size(energies,2)
+   %     if(i ~= j)
+   %         c = GetPairwiseContrast(theImg,SPs,p1,p2);
+   %         energies(i,j) = potts_weight*exp((0-contrast_lambda)*c);
+   %     else
+   %         energies(i,j) = 0;
+   %     end
+   %   end
+   %end
+ 
 
   %%%END YOUR CODE
 end

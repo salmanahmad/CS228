@@ -11,7 +11,7 @@ for i=1:size(energies,1)
         if(i ~= j)
             energies(i,j) = weight;
         else
-            energies = 0;
+            energies(i,j) = 0;
         end
       end
 end
