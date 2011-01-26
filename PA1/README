@@ -1,4 +1,10 @@
-Name: Salman Ahmad Email: saahmad@stanford.edu
+Name: Salman Ahmad 
+Email: saahmad@stanford.edu
+
+Name: Andrew Hershberger
+Email: adh15@stanford.edu
+
+
 
 === Bayesian Network Knowledge Engineering ===
 
@@ -109,17 +115,6 @@ accounts for this.
 
 
 
-
-NOTE: For questions 3a, 3b, 4a, and 4b - because the pixel based models were
-taking so long to run, I actually saved reporting the results until I had
-finished the rest of the assignment. I later realized that this was bad
-because it caused the GetFullSPEnergy changes to impact the earlier results.
-Because the assignment said that the questions are qualitative in nature and
-intended to get us to think about the properties, I did not want to re-run
-everything. I just wanted to let you know incase some of the numbers looked
-off.
-
-
 == Question 1 ==
 
 See source code
@@ -178,10 +173,26 @@ Accuracy = 0.74439 (vs 0.74638)
 
 Potts = 	.1
 Contrast = 	0.001
-Accuracy =  (vs 0.74638)
+Accuracy =  0.74168 (vs 0.74638)
+
+Potts = 	.1
+Contrast = 	0.001
+Accuracy =  0.74168 (vs 0.74638)
+
+Potts = 	.1
+Contrast = 	0.1
+Accuracy =  0.73589 (vs 0.74638)
 
 
-TODO
+It actually seems that adding the contrast values reduces performance at the
+fixed Potts weight of 0.1. I suppose this kind of make makes sense because I
+would imagine that when you look at individual pixel, the contrast between
+them will, on average be smaller because adjacent pixels are often very
+similar. This would mean that the energy function will be smaller (because of
+the negative exponent on the e) and thus may result in poorer performance.
+
+In fact, the average contrast between pixels was 2.1315e+03 while the average
+contrast between super pixels (found in the next section) was 1.0624e+04
 
 (b)
 
@@ -231,32 +242,49 @@ does 0.80737. Then again, too small values do poorly as well (0.0001 did
 
 == Question 4 ==
 
-You can see the source code for the complete set of energies that I added. A
-couple of the things that I added was the fact that the sky was above
-everything except buildings and foreground since these objects may extend to
-the top of the image because of the camera angle.
+You can see the source code for the complete set of energies that I added.
 
-Additionally, I initially made sure that water was under everything as it made
-sense. It would be difficult for there to be a road or a tree that was under
-water. However, after thinking about it, I realized that there could be a lake
-in the background, or a puddle in the middle of the road so I re-encoded the
-other energies to remove water.
+Initially I went overboard and added a bunch of things that made semantic
+sense to me, but these actually made the accuracy worse. Things like grass
+goes below foreground and tress are above grass. Additionally, I initially
+made sure that water was under everything as it made sense. It would be
+difficult for there to be a road or a tree that was under water. These results
+caused a huge decrease. I then removed everything and added only selected
+items that I observed from the output images needed tweaking.
 
-As a last example, I made sure that the buildings were above the road and
-grass. While this may not work all the time (for instance, if there is a road
-in the background or if there is a park in the distance) I think it works well
-for the car picture that we have.
+I added the sky to be above the road and the foreground. This actually did not
+help at all, which is not surprising, because the algorithm gets the sky
+really well and thus, adding energies would probably not help very much.
+
+I then noticed that the trees were slightly off in the image and made the
+trees above the road and foreground as well. This improved the results.
+
+The biggest addition I made was making the buildings above the road. I noticed
+this because there was a bunch of "red" that seeped into the purple road
+labels and added this energy to fix that.
+
+Lastly, I noticed that there was a big blob of "water" and "mountain" in the
+middle of road. This was obviously a misclassification but I could not get it
+to go away. So, I cheated a bit. I added energies to make the mountain and
+water above the road, the foreground, and even the sky! Even though this makes
+no semantic sense, I wanted to force the algorithm to not make these label
+assignments. This approach worked. The mountain labels all disappeared and the
+water labels got smaller. Obviously, this would not extend to other images.
 
 To evaluate the performance of the energies, I used the highest accuracy
 experiment we had so far - using SPNum = 2, a Potts factor of 0.1 and a
 Contrast factor of 0.001. The results before and after the energies were added
 is shown below:
 
-	After = 	0.81199
-	Before = 	0.81125
-	
-It would seem that my energies did in fact improve the results. 
+	After = 0.82857 
+	Before = 0.81199
 
+It would seem that my energies did in fact improve the results. The trick is
+adding the correct energies to correct for the mistakes that the algorithm is
+currently making. There was a weird "water" line that the algorithm was
+detecting instead of the curb side. I tried to tweak the energies to correct
+this but I was unable to do so. I would imagine that the contrast it has is
+just too large and the energies cannot account for it.
 
 === Object-superpixel interactions ===
 
@@ -267,7 +295,45 @@ See source code.
 
 (a)
 
-TODO
+	SPNum = 2
+	Potts = 0.1
+	Contrast = 0.001
+	Full = 0
+
+To test the results I used the settings above and varied the object weights. 
+
+	Object = 0.25
+	Accuracy = 0.81183
+	Observation = Only one one bounding box not in the right place
+
+	Object = 0.1
+	Accuracy = 0.81188
+	Observation = Many boxes now
+
+	Object = 0.5
+	Accuracy = 0.81145
+	Observation = Only one boxes.
+
+	Object = 0.75
+	Accuracy = 0.81145
+	Observation = Only one box
+
+	Object = 0.05
+	Accuracy = 0.81183
+	Observation = Many more boxes now
+
+It would seem that smaller object weights result in more detections. In
+particular, with an object weight of 0.25 there was only one bounding box
+while an object weight of 0.1 results in around 5-10 detections. This trend
+continues with other values of object weight. At a very small weight of 0.05
+there were even more detections but many of them were obviously wrong. This
+makes sense, because of the energy functions. The Potts model tries to
+minimize the energy as described in page 127 in the text. Having a higher
+object weight will result in a higher energy and thus makes it less likely
+that the object will be detected. At very high object weights this means that
+there will be a lot of false negatives and at very low object weights this
+means that there will be a lot of false positives - which is exactly what we
+observed.
 
 == Question2 ==
 
