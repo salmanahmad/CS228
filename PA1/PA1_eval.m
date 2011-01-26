@@ -3,13 +3,13 @@ initializeSEG;
 
 imgNum = 4;  %default 4
 %superpixel mode
-SPnum = 0; %Set to 0 for just pixels, 1-4 for increasingly large superpixels
+SPnum = 2; %Set to 0 for just pixels, 1-4 for increasingly large superpixels
 %potts factor weight
-potts_lambda = .3; %default .1 was 0
+potts_lambda = .1; %default .1 was 0s
 %contrast weighting
-contrast_lambda = 0; %default .0001 was 0
+contrast_lambda = 0.0001; %default .0001 was 0
 %user defined energy weighting
-full_lambda = 0; %default 1
+full_lambda = 1; %default 1
 %object-superpixel edge weighting
 object_weight = 0; %default .1
 %weight for your object factor
