@@ -15,21 +15,21 @@ energies = zeros(segm_params.LK);
 %%%YOUR CODE HERE
 
 %%sky energies
-energies(1,[2 3 4 5 6 7]) = 1;
+energies(1,[3 8]) = 1;
 %%tree energies
-energies(2,[3 4 5]) = 1;
+energies(2, [3 8]) = 1;
 %%road energies
-energies(3, 5) = 1;
+energies(3, []) = 1;
 %%grass energies
-energies(4, 5) = 1;
+energies(4, []) = 1;
 %%water energies
-energies(5,[]) = 1;
+energies(5,[6 8 1]) = 1;
 %%building energies
-energies(6,[3 5]) = 1;
+energies(6, 3) = 1;
 %%mountain energies
-energies(7,[3 4 5 6]) = 1;
+energies(7,[6 8]) = 1;
 %%foreground energies
-energies(8,[])= 1;
+energies(8, 5)= 1;
 
 %%%END YOUR CODE
 

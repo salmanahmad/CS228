@@ -14,12 +14,20 @@
 % CS228 Structured Probabilistic Models (Winter 2011)
 % Copyright (C) 2010, Stanford University
 
+
+
 function [energies] = GetContrastFactor(potts_weight,contrast_lambda,p1,p2,...
   theImg,SPs,segm_params)
 
+    global c_list;
+     
+         
     %energies = zeros(segm_params.LK);
 
     c = GetPairwiseContrast(theImg,SPs,p1,p2);
+    
+    c_list = cat(2, c_list, c);
+    
     energies = (ones(segm_params.LK) - eye(segm_params.LK)) * potts_weight*exp(-contrast_lambda*c);
     
   
