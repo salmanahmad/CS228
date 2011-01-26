@@ -100,7 +100,24 @@ Worthiness increase from Single. Also, interestingly enough, when I fix age to
 should not penalize a young person for not being married yet and the network
 accounts for this.
 
+
+
+
+
 === Scene Segmentation – Markov Nets ===
+
+
+
+
+
+NOTE: For questions 3a, 3b, 4a, and 4b - because the pixel based models were
+taking so long to run, I actually saved reporting the results until I had
+finished the rest of the assignment. I later realized that this was bad
+because it caused the GetFullSPEnergy changes to impact the earlier results.
+Because the assignment said that the questions are qualitative in nature and
+intended to get us to think about the properties, I did not want to re-run
+everything. I just wanted to let you know incase some of the numbers looked
+off.
 
 
 == Question 1 ==
@@ -130,9 +147,14 @@ contiguous.
 
 (b)
 
-Overall, when we use superpixels we get better performance. We fixed potts_lambda to 0.1 and rans it SPum = 1, 2, 3, 4. The results are shown below:
+Overall, when we use superpixels we get better performance. We fixed
+potts_lambda to 0.1 and rans it SPum = 1, 2, 3, 4. The results are shown
+below:
 
-	1 - 0.80558 2 - 0.80713 3 - 0.81372 4 - 0.80811
+	1 - 0.80558 
+	2 - 0.80713
+	3 - 0.81372 
+	4 - 0.80811
 
 Interestingly enough, at SPnum of 4, we get slightly less performance than
 SPnum of 3. When we changed the potts_lambda value from 0.1 to 0.001 we did
@@ -145,5 +167,108 @@ than with the pixel-level runs.
 
 == Question 3 ==
 
+See source code
+
+(a)
+
+Potts = 	.1
+Contrast = 	0.0001
+Accuracy = 0.74439 (vs 0.74638)
 
 
+Potts = 	.1
+Contrast = 	0.001
+Accuracy =  (vs 0.74638)
+
+
+TODO
+
+(b)
+
+We ran several experiments. The results are shown below. The accuracy should
+be compared against a baseline of just Potts of 0.80713. The same value of
+Potts was used in all runs (0.1)
+
+	SPNum = 	2
+	contrast = 	0.0001
+	accuracy =	0.81199
+
+	SPNum = 	2
+	contrast = 	0.00001
+	accuracy =	0.80729
+
+	SPNum = 	2
+	contrast = 	0.01
+	accuracy =	0.80935
+
+	SPNum = 	2
+	contrast = 	0.0005
+	accuracy =	0.81159
+
+	SPNum = 	2
+	contrast = 	0.01
+	accuracy =	0.80935
+
+	SPNum = 	2
+	contrast = 	0.1
+	accuracy =	0.80842
+
+	SPNum = 	2
+	contrast = 	0.5
+	accuracy =	0.80737
+
+	SPNum = 2 
+	contrast = 1.0 
+	accuracy = 0.8076
+
+The contract model definitely seems to help the segmentation. In the worst
+case it had an accuracy of 0.80737 which was still better than without
+contrast at all. Interestingly enough, it seemed that smaller contrast values
+perform better than larger ones. For instance, 0.0001 does 0.81199 while 0.5
+does 0.80737. Then again, too small values do poorly as well (0.0001 did
+0.81199).
+
+
+== Question 4 ==
+
+You can see the source code for the complete set of energies that I added. A
+couple of the things that I added was the fact that the sky was above
+everything except buildings and foreground since these objects may extend to
+the top of the image because of the camera angle.
+
+Additionally, I initially made sure that water was under everything as it made
+sense. It would be difficult for there to be a road or a tree that was under
+water. However, after thinking about it, I realized that there could be a lake
+in the background, or a puddle in the middle of the road so I re-encoded the
+other energies to remove water.
+
+As a last example, I made sure that the buildings were above the road and
+grass. While this may not work all the time (for instance, if there is a road
+in the background or if there is a park in the distance) I think it works well
+for the car picture that we have.
+
+To evaluate the performance of the energies, I used the highest accuracy
+experiment we had so far - using SPNum = 2, a Potts factor of 0.1 and a
+Contrast factor of 0.001. The results before and after the energies were added
+is shown below:
+
+	After = 	0.81199
+	Before = 	0.81125
+	
+It would seem that my energies did in fact improve the results. 
+
+
+=== Object-superpixel interactions ===
+
+
+== Question 1 ==
+
+See source code.
+
+(a)
+
+TODO
+
+== Question2 ==
+
+TODO
