@@ -1,0 +1,149 @@
+Name: Salman Ahmad Email: saahmad@stanford.edu
+
+=== Bayesian Network Knowledge Engineering ===
+
+== Question 1 ==
+
+Observing work history as 'Stable' makes the marginal of Credit Worthiness
+47.02% (Positive) and 52.98% (Negative)
+
+Observing work history as 'Unstable' makes the marginal of Credit Worthiness
+39.21% (Positive) and 60.88% (Negative)
+
+The change does NOT change the marginal for Payment History. It is expected
+because Work History and Payment History are part of a V-Structure and since
+Reliability is not observed the influence cannot flow from Work History to
+Payment History.
+
+== Question 2 ==
+
+When Reliability is set to 'Reliable' the marginal for Credit Worthiness is
+57.91% (Positive) and 42.09% (Negative).
+
+When Reliability is set to 'Unreliable' the marginal for Credit Worthiness is
+27.10% (Positive) and 72.90% (Negative).
+
+== Question 3 ==
+
+Change Work History no longer impacts the marginal for Credit Worthiness. This
+is expected because there is no active trail between Work History and Credit
+Worthiness in this case. The only trail (Work History - Reliability - Credit
+Worthiness) is "blocked" off because Reliability is observed.
+
+== Question 4 ==
+
+Yes, the marginal for Payment History does change. This is expected because
+Work History -> Reliability <- Payment History form a V-Structure. Since
+reliability is "observed" the V-structure is "activated" and influence can
+flow between Work History and Payment History.
+
+== Question 5 ==
+
+It would appear that the Future Income CPD has been tampered with. When Worth
+is set to High the marginal in the Future income is biased towards "Not
+Promising" and when Worth is set to Low the Future Income is biased towards
+Promising. This seems to be the opposite of what you would expect - People who
+are high worth now will probably be able to continue to have more money in the
+future.
+
+== Question 6 ==
+
+I swapped the two rows in the Future Income CPD. So, for every columns, I put
+the "Promising" value as "Not Promising" and vice versa. Everything seems to
+work now. When I change assets to Wealthy, the Credit Worthiness increases.
+
+== Question 7 ==
+
+I made Education a parent of Profession and a Child of Age, as I thought that
+a person's age may indicate what their highest level of education they have
+(currently) attained. I also made Education a parent of profession as I
+thought that person's education will impact their professional status.0.05
+
+The CPD for Education is Rows = Education (high school, college, graduate) and
+Columns = Age (a16_21, a22_21, a66_up)
+
+0.8 0.6 0.6 
+0.19 0.3 0.3 
+0.01 0.1 0.1
+
+The CPD for Profession is: Rows = Profession (High income, medium income, low
+income) Columns = Education (high school, college, graduate)
+
+0.05 0.3 0.35 
+0.15 0.5 0.4 
+0.8 0.2 0.25
+
+When I observe education to high school I notice that credit worthiness is
+decreases relative to college and graduate education. As an added bonus,
+people with graduate educations actually result in a lower credit worthiness
+marginal because life as a graduate student sucks so why should the real world
+be any different (*sigh*).
+
+== Question 8 ==
+
+I added a married node that indicates if a person is married or single (I do
+not model divorced). I attach this as a child of Age and a Parent of
+Reliability because I would guess that married people are considered more
+"responsible" and less likely to take risks that would impact their
+reliability.
+
+The CPD for married is: (Rows are married {Married, Single} and Columns are
+Are {a16_22, a22_65, a65_up}). Notice how the probability of married people
+goes down with a66_up because I factor in the sad fact that people die.
+
+0.1 0.8 0.6 
+0.9 0.2 0.4
+
+When I switch the the Married variable to Married I notice that the Credit
+Worthiness increase from Single. Also, interestingly enough, when I fix age to
+16-22 the different is not that much. This I suppose makes sense as well, you
+should not penalize a young person for not being married yet and the network
+accounts for this.
+
+=== Scene Segmentation – Markov Nets ===
+
+
+== Question 1 ==
+
+See source code
+
+== Question 2 == 
+
+See source code
+
+(a)
+
+We ran the experiment on the pixel level with four different values for
+potts_lambda - 0.1, 0.3, 0.5 and 0.9. The accuracy results are shown below:
+
+	0.1 - 0.74638
+	0.3 - 0.76266
+	0.5 - 0.77733
+	0.9 - 0.79766
+	1.0 - 0.80142
+	2.0 - 0.82862
+
+From the results we got back, it seemed that for Pixel level data, higher
+Potts factors performed better. Qualitatively, the high Potts factors resulted
+in images that had less "holes" in them which caused the labelings to be more
+contiguous.
+
+(b)
+
+Overall, when we use superpixels we get better performance. We fixed potts_lambda to 0.1 and rans it SPum = 1, 2, 3, 4. The results are shown below:
+
+	1 - 0.80558 2 - 0.80713 3 - 0.81372 4 - 0.80811
+
+Interestingly enough, at SPnum of 4, we get slightly less performance than
+SPnum of 3. When we changed the potts_lambda value from 0.1 to 0.001 we did
+not observe a huge different in performance. For example, SPnum 4 went from
+0.80811 to 0.79926 and when we used potts_lambda of 0.5 at SPnum = 4 became
+0.8533
+
+Qualitatively, we noticed that the images we got back were much more "jaggy"
+than with the pixel-level runs.
+
+== Question 3 ==
+
+
+
