@@ -1,4 +1,4 @@
-
+%git test
 
 energies = zeros(8)
 
