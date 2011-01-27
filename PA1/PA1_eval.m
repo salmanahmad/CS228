@@ -11,9 +11,9 @@ contrast_lambda = 0.0001; %default .0001 was 0
 %user defined energy weighting
 full_lambda = 1; %default 1
 %object-superpixel edge weighting
-object_weight = 0; %default .1
+object_weight = .1; %default .1
 %weight for your object factor
-new_object_weight = 0;
+new_object_weight = .1;
 
 confusion = ComparisonFramework(imgNum,potts_lambda,contrast_lambda,full_lambda,...
   object_weight,new_object_weight,SPnum);

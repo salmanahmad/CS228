@@ -38,22 +38,30 @@ function [F_new] = GetObjectSPFactors(objects,SPs,objStart,segm_params,weight,ne
         bb,segm_params,weight);
     end
     
-    %%%YOUR CODE HERE
+     %%%YOUR CODE HERE
     
-    %use new_weight to weight your energies.
+
+     
+	height = floor(objects(i).h);
+	width = floor(objects(i).w);
+
+    below_ymin = min([(ymin+height) h]);
+    below_ymax = min([(ymax+height) h]);
     
-    %num_relations_you_add = ?
-    %YOUR_SUPERPIXEL = ?
-    %YOUR_ENERGY = ?
-    %
-    %
-    %F_new = [F_new; repmat(struct('vars', [], 'cards', [2 segm_params.LK], 'data', []),...
-    %  num_relations_you_add, 1)];
-    %for each factor you want to add
-    %  %now create the factor over the object and SP
-    %  F_new(lastO+j).vars = [objStart+i YOUR_SUPERPIXEL];
-    %  F_new(lastO+j).data = YOUR_ENERGY
-    %end
+	belowSPs = unique(SPs(below_ymin:below_ymax,xmin:xmax));
+	num_relations_you_add = length(belowSPs);
+    
+  
+    lastO = length(F_new);
+    F_new = [F_new; repmat(struct('vars', [], 'cards', [2 segm_params.LK], 'data', []),...
+      num_relations_you_add, 1)];
+
+  
+    for j=1:num_relations_you_add
+      %now create the factor over the object and SP
+      F_new(lastO+j).vars = [objStart+i belowSPs(j)];
+      F_new(lastO+j).data = [0 0 0 0 0 0 0 0; 0.7 0.7 0.1 0.7 0.7 0.7 0.7 0] * new_weight;
+    end
     
     %%%END YOUR CODE
   end
