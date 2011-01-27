@@ -55,13 +55,54 @@ function [F_new] = GetObjectSPFactors(objects,SPs,objStart,segm_params,weight,ne
     lastO = length(F_new);
     F_new = [F_new; repmat(struct('vars', [], 'cards', [2 segm_params.LK], 'data', []),...
       num_relations_you_add, 1)];
-
   
     for j=1:num_relations_you_add
       %now create the factor over the object and SP
       F_new(lastO+j).vars = [objStart+i belowSPs(j)];
       F_new(lastO+j).data = [0 0 0 0 0 0 0 0; 0.7 0.7 0.1 0.7 0.7 0.7 0.7 0] * new_weight;
     end
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    %{
+    
+    above_ymin = max([(ymin-height) 1]);
+    above_ymax = max([(ymax-height) 1]);
+    
+	aboveSPs = unique(SPs(above_ymin:above_ymax,xmin:xmax));
+	num_relations_you_add = length(aboveSPs);
+    
+  
+    lastO = length(F_new);
+    F_new = [F_new; repmat(struct('vars', [], 'cards', [2 segm_params.LK], 'data', []),...
+      num_relations_you_add, 1)];
+  
+    for j=1:num_relations_you_add
+      %now create the factor over the object and SP
+      F_new(lastO+j).vars = [objStart+i aboveSPs(j)];
+      F_new(lastO+j).data = [0 0 0 0 0 0 0 0; 0.5 0.1 0.5 0.5 0.5 0.1 0.5 0] * new_weight;
+    end
+    
+    %}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     %%%END YOUR CODE
   end
