@@ -8,7 +8,7 @@ Email: adh15@stanford.edu
 
 === Bayesian Network Knowledge Engineering ===
 
-== Question 1 ==
+== Question 2.3.1 ==
 
 Observing work history as 'Stable' makes the marginal of Credit Worthiness
 47.02% (Positive) and 52.98% (Negative)
@@ -21,7 +21,7 @@ because Work History and Payment History are part of a V-Structure and since
 Reliability is not observed the influence cannot flow from Work History to
 Payment History.
 
-== Question 2 ==
+== Question 2.3.2 ==
 
 When Reliability is set to 'Reliable' the marginal for Credit Worthiness is
 57.91% (Positive) and 42.09% (Negative).
@@ -29,21 +29,21 @@ When Reliability is set to 'Reliable' the marginal for Credit Worthiness is
 When Reliability is set to 'Unreliable' the marginal for Credit Worthiness is
 27.10% (Positive) and 72.90% (Negative).
 
-== Question 3 ==
+== Question 2.3.3 ==
 
 Change Work History no longer impacts the marginal for Credit Worthiness. This
 is expected because there is no active trail between Work History and Credit
 Worthiness in this case. The only trail (Work History - Reliability - Credit
 Worthiness) is "blocked" off because Reliability is observed.
 
-== Question 4 ==
+== Question 2.3.4 ==
 
 Yes, the marginal for Payment History does change. This is expected because
 Work History -> Reliability <- Payment History form a V-Structure. Since
 reliability is "observed" the V-structure is "activated" and influence can
 flow between Work History and Payment History.
 
-== Question 5 ==
+== Question 2.3.5 ==
 
 It would appear that the Future Income CPD has been tampered with. When Worth
 is set to High the marginal in the Future income is biased towards "Not
@@ -52,13 +52,13 @@ Promising. This seems to be the opposite of what you would expect - People who
 are high worth now will probably be able to continue to have more money in the
 future.
 
-== Question 6 ==
+== Question 2.3.6 ==
 
 I swapped the two rows in the Future Income CPD. So, for every columns, I put
 the "Promising" value as "Not Promising" and vice versa. Everything seems to
 work now. When I change assets to Wealthy, the Credit Worthiness increases.
 
-== Question 7 ==
+== Question 2.3.7 ==
 
 I made Education a parent of Profession and a Child of Age, as I thought that
 a person's age may indicate what their highest level of education they have
@@ -85,7 +85,7 @@ people with graduate educations actually result in a lower credit worthiness
 marginal because life as a graduate student sucks so why should the real world
 be any different (*sigh*).
 
-== Question 8 ==
+== Question 2.3.8 ==
 
 I added a married node that indicates if a person is married or single (I do
 not model divorced). I attach this as a child of Age and a Parent of
@@ -115,11 +115,11 @@ accounts for this.
 
 
 
-== Question 1 ==
+== Question 3.3.1.1 ==
 
 See source code
 
-== Question 2 == 
+== Question 3.3.1.2 == 
 
 See source code
 
@@ -160,7 +160,7 @@ not observe a huge different in performance. For example, SPnum 4 went from
 Qualitatively, we noticed that the images we got back were much more "jaggy"
 than with the pixel-level runs.
 
-== Question 3 ==
+== Question 3.3.1.3 ==
 
 See source code
 
@@ -240,7 +240,7 @@ does 0.80737. Then again, too small values do poorly as well (0.0001 did
 0.81199).
 
 
-== Question 4 ==
+== Question 3.3.1.4 ==
 
 You can see the source code for the complete set of energies that I added.
 
@@ -264,12 +264,9 @@ this because there was a bunch of "red" that seeped into the purple road
 labels and added this energy to fix that.
 
 Lastly, I noticed that there was a big blob of "water" and "mountain" in the
-middle of road. This was obviously a misclassification but I could not get it
-to go away. So, I cheated a bit. I added energies to make the mountain and
-water above the road, the foreground, and even the sky! Even though this makes
-no semantic sense, I wanted to force the algorithm to not make these label
-assignments. This approach worked. The mountain labels all disappeared and the
-water labels got smaller. Obviously, this would not extend to other images.
+middle of road. I tried to add energies to get rid of this but I could not.
+The "curb" in the image was being mislabeled as water and I could not find an
+energy that corrected that labeling.
 
 To evaluate the performance of the energies, I used the highest accuracy
 experiment we had so far - using SPNum = 2, a Potts factor of 0.1 and a
@@ -289,7 +286,7 @@ just too large and the energies cannot account for it.
 === Object-superpixel interactions ===
 
 
-== Question 1 ==
+== Question 3.3.2.1 ==
 
 See source code.
 
@@ -335,6 +332,23 @@ there will be a lot of false negatives and at very low object weights this
 means that there will be a lot of false positives - which is exactly what we
 observed.
 
-== Question2 ==
+== Question 3.3.2.2 ==
 
-TODO
+I added a special factor (which admittedly isn't that amazing) that simple
+looks at the object bounding boxes and makes sure that they are above the
+"road". What I do is move 'bb' down and add energy to penalize any SP
+classification that is not road.
+
+The do get better performance results:
+
+	Before: 0.82857 
+	After: 0.82939
+
+The object detection for cars are better than without. The only problem is
+that I had a bunch of small overlapping detections. I did want to incorporate
+a factor that discouraged detections to be overlapping.
+
+The confusion matrix did not improve dramatically, but then again, my accuracy
+improvement wasn't that amazing so I suppose that is to be expected.
+
+
