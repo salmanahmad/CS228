@@ -11,7 +11,7 @@
 % CS228 Probabilistic Models in AI (Winter 2007)
 % Copyright (C) 2007, Stanford University
 
-function [C] = FactorProduct(A, B);
+function [C] = FactorProduct(A, B)
 
 % check for empty factors
 if (isempty(A.var)), C = B; return; end;
@@ -19,7 +19,7 @@ if (isempty(B.var)), C = A; return; end;
 
 % construct the output factor over all variables and mapping between
 % variables in A and B and variables in C
-mapA = zeros(1, length(A.var));    
+mapA = zeros(1, length(A.var));
 mapB = zeros(1, length(B.var));
 
 C.var = unique([A.var, B.var]);
@@ -54,3 +54,7 @@ indxB = AssignmentToIndex(assignments(:, mapB), B.dim);
 % Correctly populate the factor values of C
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+for i = 1:length(C.val),
+    C.val(i) = A.val(indxA(i)) * B.val(indxB(i));
+end;
