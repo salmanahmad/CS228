@@ -10,7 +10,7 @@
 % CS228 Probabilistic Models in AI (Winter 2007)
 % Copyright (C) 2007, Stanford University
 
-function F = ObserveEvidence(F, E);
+function F = ObserveEvidence(F, E)
 
 % TO DO: could also do this by simply appending factors with 0/1 entries
 % corresponding to the evidence.
@@ -39,6 +39,16 @@ for i = 1:size(E, 1),
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+            % set entries in F(j).val inconsistent with v == x to zero
+            assignments = IndexToAssignment(1:prod(F(j).dim), F(j).dim);
+            for k = 1:length(F(j).val),
+                if (x ~= assignments(k,indx)),
+                    F(j).val(k) = 0;
+                end;
+            end;
+
+            %%%% end YOUR CODE HERE %%%%
+            
             if (all(F(j).val == 0)),
                 warning(['factor ', int2str(j), ' makes variable assignment impossible']);
             end;
