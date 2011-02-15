@@ -10,7 +10,7 @@
 % CS228 Probabilistic Models in AI (Winter 2007)
 % Copyright (C) 2007, Stanford University
 
-function [B] = FactorMarginalization(A, V);
+function [B] = FactorMarginalization(A, V)
 
 % check for empty factor or variable list
 if (isempty(A.var) || isempty(V)), B = A; return; end;
@@ -31,3 +31,7 @@ indxB = AssignmentToIndex(assignments(:, mapB), B.dim);
 % Correctly populate the factor values of B
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+for i = 1:length(A.val),
+    B.val(indxB(i)) = B.val(indxB(i)) + A.val(i);
+end;
