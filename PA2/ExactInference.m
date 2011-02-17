@@ -39,6 +39,13 @@ M = repmat(struct('var', 0, 'dim', 0, 'val', []), length(T.names), 1);
 % Populate M so that M(i) contains the marginal probability over
 % variable i
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+for i = 1:length(M),
+    pIdx = FindPotentialWithVariable(P,i);
+    M(i) = FactorMarginalization(P(pIdx), setdiff(P(pIdx).var,i));
+    M(i).val = M(i).val/sum(M(i).val);
+end;
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 return;
 
