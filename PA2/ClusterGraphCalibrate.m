@@ -26,6 +26,15 @@ alpha = zeros(length(F), 1);
 % alpha(i) should contain the index of the clique that factor i
 % belongs to
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+for i = 1:length(F),
+    for j = 1:length(G.nodes),
+        if (all(ismember(F(i).var, G.nodes{j}))),
+            alpha(i) = j;
+        end;
+    end;
+end;
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if (any(alpha == 0)),
@@ -53,6 +62,11 @@ for m = 1:length(edgeFromIndx),
     % MESSAGES(i,j) should be set to the initial value for the
     % message from cluster i to cluster j
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    MESSAGES(i,j).var = intersect(G.nodes{i},G.nodes{j});
+    MESSAGES(i,j).dim = G.dim(MESSAGES(i,j).var);
+    MESSAGES(i,j).val = ones(1,prod(MESSAGES(i,j).dim));
+    
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 end;
 
@@ -61,6 +75,11 @@ end;
 % Populate P with the initial potentials for each clique
 % P(i) should contain the initial potential for clique i
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+for i = 1:length(F)
+    P(alpha(i)) = FactorProduct(P(alpha(i)), F(i));
+end;
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % perform loopy belief propagation
@@ -84,6 +103,18 @@ while (1),
     % in MESSAGES(i,j)
     % Finally, normalize the message to prevent overflow.
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    delta_ij = P(i);
+    
+    for k = 1:length(P),
+        if (G.edges(k,i) == 0), continue; end;
+        if (j == k), continue; end;
+        delta_ij = FactorProduct(delta_ij,MESSAGES(k,i));
+    end;
+    
+    varsToElim = setdiff(P(i).var,P(j).var);
+    MESSAGES(i,j) = FactorMarginalization(delta_ij,varsToElim);
+    
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     % Check for convergence every m iterations
@@ -102,6 +133,14 @@ disp(['Total number of messages passed: ', num2str(iteration)]);
 % YOUR CODE HERE
 % Compute final potentials and place them in P
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+for j = 1:size(MESSAGES, 1),
+    for i = 1:size(MESSAGES, 2),
+        if (G.edges(i, j) == 0), continue; end;
+        P(j) = FactorProduct(P(j), MESSAGES(i,j));
+    end;
+end;
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Get the max difference between the marginal entries of 2 messages -------
