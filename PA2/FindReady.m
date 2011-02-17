@@ -23,6 +23,19 @@ for i = 1:size(T.edges, 1),
         % set 'ready' to 1.
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        
+        ready = 1;
+        
+        for k = 1:size(T.edges, 1)
+            if (T.edges(k, i) ~= 0)
+                if(isempty(messages(k, i).var))
+                    ready = 0;
+                    break;
+                end
+            end
+        end
+        
+        
         if (ready == 1),
             return;
         end;
