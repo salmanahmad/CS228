@@ -25,6 +25,15 @@ alpha = zeros(length(F), 1);
 % alpha(i) should contain the index of the clique that factor i
 % belongs to
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+for i = 1:length(F),
+    for j = 1:length(T.nodes),
+        if (all(ismember(F(i).var, cell2mat(T.nodes(j))))),
+            alpha(i) = j;
+        end;
+    end;
+end;
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if (any(alpha == 0)),
@@ -46,6 +55,11 @@ MESSAGES = repmat(struct('var', [], 'dim', [], 'val', []), N, N);
 % Populate P with the initial potentials for each clique
 % P(i) should contain the initial potential for clique i
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+for i = 1:length(F)
+    P(alpha(i)) = FactorProduct(P(alpha(i)), F(i));
+end;
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 lasti = 0; lastj = 0;
@@ -66,6 +80,18 @@ while (1), % while ready cliques exist
     % Clique i is ready to send a message to clique j, so compute
     % this message and put it in messages(i,j)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    delta_ij = P(i);
+    
+    for k = 1:length(P)
+        if (T.edges(k,i) == 0), continue; end;
+        if (j == k), continue; end;
+        delta_ij = FactorProduct(delta_ij,MESSAGES(k,i));
+    end;
+    
+    varsToElim = setdiff(P(i).var,P(j).var);
+    MESSAGES(i,j) = FactorMarginalization(delta_ij,varsToElim);
+    
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 end;
 
@@ -73,5 +99,13 @@ end;
 % YOUR CODE HERE
 % Compute final potentials and place them in P
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+for j = 1:size(MESSAGES, 1),
+    for i = 1:size(MESSAGES, 2),
+        if (T.edges(i, j) == 0), continue; end;
+        P(j) = FactorProduct(P(j), MESSAGES(i,j));
+    end;
+end;
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
