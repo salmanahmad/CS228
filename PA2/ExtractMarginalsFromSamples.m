@@ -19,4 +19,20 @@ end
 % Populate M so that M(i) contains the marginal probability over
 % variable i
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+for i = 1:length(M),
+    
+    numSamples = size(collected_samples, 1);
+    
+    for j = 1:M(i).dim,
+       M(i).val(j) =  sum(collected_samples(:,i) == j);
+    end
+    
+    M(i).val = M(i).val / numSamples;
+    
+end
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
