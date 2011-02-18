@@ -1,4 +1,4 @@
-%BLOCKLOGDISTRIBUTION
+%BLOCKLOGDvISTRIBUTION
 %
 %   LogBS = BlockLogDistribution(V, G, F, A) returns the log of a
 %   block-sampling array (which contains the log-unnormalized-probabilities of
@@ -29,6 +29,34 @@ LogBS = zeros(1, d);
 % should make use of G.var2factors and the functions intersect, repmat, and
 % GetValuesOfAssignments.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+for i = 1:length(V),
+    % get assignments to its parents
+    
+    % find factors containing V(i)
+    factors = cell2mat(G.var2factors(V(i)));
+    
+    
+    for j = 1:length(factors),
+        
+        factors(j);
+        F(factors(j));
+        F(factors(j)).var;
+        A(F(factors(j)).var);
+        
+        assignments = repmat(A(F(factors(j)).var), d, 1);
+        indxVinJ = F(factors(j)).var == V;
+        assignments(:,indxVinJ) = [1:d]';
+        
+        
+        % find distribution given that evidence
+        probs = GetValuesOfAssignments(F(factors(j)), assignments);
+
+        % update LogBS
+        LogBS = LogBS + log(probs);
+    end;
+end;
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Re-normalize to prevent underflow when you move back to probability space
