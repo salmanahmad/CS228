@@ -16,5 +16,10 @@ for i = 1:length(G.names)
     % IMPORTANT: you should call the matlab function randsample() exactly once
     % here, and it should be the only random function you call.
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    distribution = BlockLogDistribution(i,G, F, A);
+    distribution = exp(distribution);
+    A(i) = randsample(length(distribution), 1, true, distribution);
+    
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 end

@@ -30,31 +30,27 @@ LogBS = zeros(1, d);
 % GetValuesOfAssignments.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-for i = 1:length(V),
-    % get assignments to its parents
-    
-    % find factors containing V(i)
-    factors = cell2mat(G.var2factors(V(i)));
-    
-    
-    for j = 1:length(factors),
-        
-        factors(j);
-        F(factors(j));
-        F(factors(j)).var;
-        A(F(factors(j)).var);
-        
-        assignments = repmat(A(F(factors(j)).var), d, 1);
-        indxVinJ = F(factors(j)).var == V;
-        assignments(:,indxVinJ) = [1:d]';
-        
-        
-        % find distribution given that evidence
-        probs = GetValuesOfAssignments(F(factors(j)), assignments);
+% Loop over factors to determine the probability that
+% each one is sampled in the possible ways
 
-        % update LogBS
-        LogBS = LogBS + log(probs);
-    end;
+% get a list of the factors of interest
+factors = F(unique([G.var2factors{V}]));
+
+for i = 1:length(factors),
+    factor = factors(i);
+    
+    % determine which sampling vars this factor contains
+    [sampling_vars,sampling_indices] = intersect(factor.var,V);
+    
+    % build up assignments of interest
+    assignments = repmat(A(factor.var), d, 1);
+    assignments(:,sampling_indices) = repmat((1:d)',1,length(sampling_indices));
+
+    % find distribution given that evidence
+    probs = GetValuesOfAssignments(factor, assignments);
+
+    % update LogBS
+    LogBS = LogBS + log(probs);
 end;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
