@@ -105,6 +105,8 @@ for i = 1:max_iter
     % Transition A to the next state in the Markov Chain 
     % and store the new sample in all_samples
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    A = Trans(A,G,F);
+    all_samples(i+1, :) = A;
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 end
 
