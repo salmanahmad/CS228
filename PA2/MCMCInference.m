@@ -70,12 +70,19 @@ if bSwendsenWang
               % YOUR CODE HERE
               % Specify the q_{i,j}'s for Swendsen-Wang for variant 1
               %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+              
+              q_ij = 0.5;
+              
               %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
           elseif strcmp(TransName, 'MHSwendsenWang2')
               %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
               % YOUR CODE HERE
               % Specify the q_{i,j}'s for Swendsen-Wang for variant 2
               %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+              
+              assignments = repmat((1:unique(edge_factor.dim))', 1, length(edge_factor.var));
+              q_ij = sum(GetValuesOfAssignments(edge_factor, assignments))/sum(edge_factor.val);
+              
               %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
           else
               disp('WARNING: unrecognized Swendsen-Wang name');
