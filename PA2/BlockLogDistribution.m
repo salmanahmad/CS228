@@ -1,4 +1,4 @@
-%BLOCKLOGDvISTRIBUTION
+%BLOCKLOGDISTRIBUTION
 %
 %   LogBS = BlockLogDistribution(V, G, F, A) returns the log of a
 %   block-sampling array (which contains the log-unnormalized-probabilities of
