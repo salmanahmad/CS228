@@ -1,1 +1,92 @@
-Please read me
+Salman Ahmad and Andrew Hershberger
+CS 228
+PA2
+
+1) You can only use the same clique tree for different images at the same superpixel level if the image segmentation into superpixels does not depend on the image itself. Otherwise, the clique tree could be different since the superpixels are different.
+
+You can't use the same clique tree for the same image at a different superpixel level because the graphs will be different sizes: e.g. at superpixel level 3, there will be a different number of superpixels than at superpixel level 2.
+
+The same arguments apply in the case of cluster graphs.
+
+
+2)	a. No, they converge at different rates. We added the plot statements inside the ClusterGraphCalibrate.m file so the numbers listed below are for the last run of approximate inference.
+		29 -> 1 converged after 6 iterations.
+		35 -> 6 converged after 3 iterations.
+		27 -> 54 converged after 4 iterations.
+
+		b. We tried implementing an ordering that always selected the message with the highest residual, however we did not see any change from the default ordering. This may be due to a bug in our code since we expected convergence to happen more quickly in this case.
+		
+		c. Yes, changing the order can affect convergence in cluster graph calibration. For example, consider the ordering where certain messages are never picked. In this case, the messages will converge more quickly since the messages that are not picked do not change (appear to have converged). Obviously, this will produce a poor result, but it will affect the rate of convergence.
+	Similarly, this would also affect the values of the final marginals since they depend on the values of all the messages, including the ones that were never picked for iteration.
+
+3)	We ran TestToy with the following parameters:
+		On diag: 1.0, Off diag: 0.1
+		On diag: 0.1, Off diag: 1.0
+		On diag: 1.0, Off diag: 1.0
+		
+		In each case, for exact inference, the left pixels had slightly higher marginals than the right pixels. The third run produced the most contrast between the left and right pixels.
+		
+		For approximate inference there was a less clear trend. The first run (higher on-off diagonal ratio) resulted in most of the pixels having a higher (darker) marginal. The second run (small on-off diagonal ratio) resulted in most of the pixels having a lower (lighter) marginal. The third run led to pixels with high marginals that were exactly the same.
+
+4)	When the initial state is all ones, the variance in the pixel marginals is low as is their accuracy. In the first and third runs, the marginals were all low-valued, and in the second run the marginals were mid-ranged.
+
+		Qualitatively, when the initial state is all twos, the results are similar but with higher marginals across the board. This leads us to belive that Gibbs sampling is not very good at mixing and is getting stuck in a local optimum near the initial values.
+		
+		MHUniform also mixes poorly:
+			all twos A0 leads to very high marginals (and inaccurate results) for all pixels.
+			all ones A0 leads to very low marginals (and inaccurate results) for all pixels.
+
+		MHSW1:
+			all ones and all twos A0 leads to more accurate results with this algorithm since it flips multiple pixels at a time. This is especially apparent from the plot of the marginals over iterations, which shows the marginals changing much more than in the other cases.
+
+5) 	Trans(on-diag, off-diag)
+
+		Gibbs(1.0, 0.1):
+			a) During the mixing process, the marginals stay close to either 0 or 1. They never seem to settle in between, rather they go directly from one extreme to the other.
+			b) The marginals are inaccurate, always taking on one of the extreme values or the other.
+			
+		MHUniform(1.0, 0.1):
+			a) This case is similar to the Gibbs case but with slightly more transitions between the extremes.
+			b) The results are slightly more accurate, with a visible difference between the left and right pixels as in the exact results.
+		
+		MHGibbs(1.0, 0.1):
+			a) This case shows only a single transition between the extreme values.
+			b) This case has a poor accuracy as well.
+		
+		MHSwendsenWang1(1.0, 0.1):
+			a) This algorithm mixes much more than the others. The marginals never hover around 1 or 0.
+			b) This case has a poor accuracy (mostly gray, no clear separation between left and right).
+
+		Gibbs(0.1, 1.0):
+			a) Doesn't mix at all: marginals always stay near the extremems. This is even worse than before where there were some marginal transitions.
+			b) Poor accuracy: checker-board marginals
+
+		MHUniform(0.1, 1.0):
+			a) Mixes a little bit initially, but then the marginals stick to the extremes (after about 1100 iterations).
+			b) Again, poor accuracy with the checker-board marginals
+		
+		MHGibbs(0.1, 1.0):
+			a) No mixing.
+			b) Poor accuracy, checkerboard marginals
+		
+		MHSW1(0.1, 1.0):
+			a) No mixing
+			b) Poor accuracy, checkerboard marginals
+		
+		Gibbs(1.0, 1.0):
+			a) 
+			b) 
+
+		MHUniform(1.0, 1.0):
+			a) 
+			b) 
+		
+		MHGibbs(1.0, 1.0):
+			a) 
+			b) 
+		
+		MHSW1(1.0, 1.0):
+			a) 
+			b) 
+
+6)	Because the SW algorithm's proposal distribution activates edges to form connected components, it allows the mixing to break into the superpixels themselves. This allows you to still mix by flipping multiple variables at the same time, but does not restrict you to all-or-nothing label assignments in a given superpixel.

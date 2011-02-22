@@ -86,7 +86,7 @@ p_acceptance = 0.0;
 
 p_A = LogProbOfJointAssignment(F,A);
 p_A_prop = LogProbOfJointAssignment(F,A_prop);
-p_acceptance = exp(p_A_prop) / exp(p_A) * exp(log_QY_ratio);
+p_acceptance = exp(p_A_prop) / exp(p_A) * exp(log_QY_ratio) * exp(LogR(old_value)) / exp(LogR(new_value));
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

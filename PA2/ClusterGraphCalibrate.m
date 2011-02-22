@@ -82,6 +82,19 @@ end;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%%%%%%%%%
+% QUESTION 5.2
+%%%%%%%%%
+
+X1 = [];
+X2 = [];
+X3 = [];
+
+maxX = 0;
+maxY = 0;
+
+%%%%%%%%%
+
 % perform loopy belief propagation
 tic;
 iteration = 1;
@@ -95,6 +108,18 @@ while (1),
     i = edgeFromIndx(m+1);
     j = edgeToIndx(m+1);
     m = mod(m+1, length(edgeFromIndx));
+    
+    %%%%%%%%%%%
+    % Question 5.2b
+    % Approach: always pass the message with the highest residual
+    %%%%%%%%%%%
+    
+%    if (maxX ~= 0 && maxY ~= 0),
+%        i = maxX;
+%        j = maxY;
+%    end;
+    
+    %%%%%%%%%%%
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % YOUR CODE HERE
@@ -115,7 +140,35 @@ while (1),
     varsToElim = setdiff(P(i).var,P(j).var);
     MESSAGES(i,j) = FactorMarginalization(delta_ij,varsToElim);
     
+    
+%    if (i==29 && j==1),
+%        X1 = [X1 MessageDelta(MESSAGES(i,j), lastMESSAGES(i,j))];
+%    elseif (i==35 && j==6),
+%        X2 = [X2 MessageDelta(MESSAGES(i,j), lastMESSAGES(i,j))];
+%    elseif (i==27 && j==54),
+%        X3 = [X3 MessageDelta(MESSAGES(i,j), lastMESSAGES(i,j))];
+%    end;
+    
+    
+    
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    %%%
+%    maxDelta = -5;
+%    maxX = 0;
+%    maxY = 0;
+%    for x = 1:size(MESSAGES,1),
+%        for y = 1:size(MESSAGES,2),
+%            delta = MessageDelta(MESSAGES(x,y),lastMESSAGES(x,y));
+%            maxDelta = max(maxDelta, delta);
+%            if (maxDelta == delta),
+%                maxX = x;
+%                maxY = y;
+%            end;
+%        end;
+%    end;
+
+    %%%
     
     % Check for convergence every m iterations
     if mod(m, length(edgeFromIndx)) == 0
@@ -128,6 +181,24 @@ while (1),
 end;
 toc;
 disp(['Total number of messages passed: ', num2str(iteration)]);
+
+
+%%%%%%%%%
+% QUESTION 5.2
+%%%%%%%%%
+
+%subplot(131);
+%plot(X1);
+
+%subplot(132);
+%plot(X2);
+
+%subplot(133);
+%plot(X3);
+
+%%%%%%%%%
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % YOUR CODE HERE
