@@ -14,3 +14,14 @@ mu = 0;
 sigma = 1;
 
 % YOUR CODE HERE
+%%%%%%%%%%%%%%%%%%%
+
+%We are GENIUSES!
+
+mu = sum(X .* W) / sum(W);
+sigma = sqrt(  (sum((X .* X) .* W) / sum(W)) - mu^2  );
+
+%%%%%%%%%%%%%%%%%%%%
+
+
+
