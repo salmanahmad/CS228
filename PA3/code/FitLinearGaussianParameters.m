@@ -34,3 +34,77 @@ sigma = 1;
 % then compute sigma according to eq. (17) in PA description
 
 % YOUR CODE HERE
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+A = zeros(K + 1, K + 1);
+
+for j = 1:K,
+   [mu, s] = FitGaussianParameters(U(:,j), W);
+   A(1,j) = mu;
+end;
+
+A(1, K+1) = 1;
+
+for i = 2:K+1,
+   for j = 1:K,
+       [mu, s] = FitGaussianParameters(U(:,i - 1) .* U(:,j), W);
+       A(i,j) = mu;
+   end;
+   
+   [mu, s] = FitGaussianParameters(U(:,i - 1), W);
+   A(i,K+1) = mu;
+   
+end;
+
+
+
+
+B = zeros(K + 1, 1);
+
+[mu, s] = FitGaussianParameters(X, W);
+B(1) = mu;
+
+for i = 2:K+1,
+    [mu, s] = FitGaussianParameters(X .* U(:,i-1), W);
+    B(i) = mu;
+end;
+
+
+
+
+Beta = linsolve(A, B);
+
+
+
+
+
+c = cov(X, X, W);
+s = 0;
+for i = 1:K,
+    for j = 1:K,
+        s = s + Beta(i)*Beta(j)*cov(U(:,i), U(:,j), W);
+    end;
+end;
+
+
+sigma = sqrt(c - s);
+
+
+
+
+end
+
+function c = cov(X, Y, W)
+    
+    [mu_xy, s] = FitGaussianParameters(X .* Y, W);    
+    [mu_x, s] = FitGaussianParameters(X, W);
+    [mu_y, s] = FitGaussianParameters(Y, W);
+    
+    c = mu_xy - (mu_x * mu_y);
+    
+end
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
