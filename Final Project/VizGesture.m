@@ -1,4 +1,4 @@
-fd = fopen('gestures_v1/track_high_kick_03.log');
+fd = fopen('gestures_v1/track_high_kick_00.log');
 
 data = [];
 frame_rate = 30;
