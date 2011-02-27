@@ -27,6 +27,12 @@ for iter=1:maxIter
     %%%%%%%%%%%%%%%%%%%%%%%%%
     % YOUR CODE HERE
     %%%%%%%%%%%%%%%%%%%%%%%%%
+
+    P.c = sum(ClassProb);
+    P.c = P.c / sum(P.c);
+    
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%
         
     for i=1:10 % for each body part variable (node)
         
@@ -51,6 +57,11 @@ for iter=1:maxIter
                 
                 %%%%%%%%%%%%%%%%%%%%%%%%%%
                 % YOUR CODE HERE
+                                
+                [P.clg(i).mu_y(k) P.clg(i).sigma_y(k)] = FitGaussianParameters(dataset(:,i,1), ClassProb(:,k));
+                [P.clg(i).mu_x(k) P.clg(i).sigma_x(k)] = FitGaussianParameters(dataset(:,i,2), ClassProb(:,k));
+                [P.clg(i).mu_angle(k) P.clg(i).sigma_angle(k)] = FitGaussianParameters(dataset(:,i,3), ClassProb(:,k));
+                
                 %%%%%%%%%%%%%%%%%%%%%%%%%%
                 
             elseif G(i,1) == 1 % parametrized by (5),(6),(7)
@@ -62,6 +73,11 @@ for iter=1:maxIter
                 
                 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
                 % YOUR CODE HERE
+                
+                [P.clg(i).theta(k,[2:4 1]) P.clg(i).sigma_y(k)] = FitLinearGaussianParameters(dataset(:,i,1), squeeze(dataset(:,parent,:)),ClassProb(:,k));
+                [P.clg(i).theta(k,[6:8 5]) P.clg(i).sigma_x(k)] = FitLinearGaussianParameters(dataset(:,i,2), squeeze(dataset(:,parent,:)),ClassProb(:,k));
+                [P.clg(i).theta(k,[10:12 9]) P.clg(i).sigma_angle(k)] = FitLinearGaussianParameters(dataset(:,i,3), squeeze(dataset(:,parent,:)),ClassProb(:,k));
+                
                 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
                 
             elseif G(i,1) == 2 % parametrized by (8),(9),(10)
@@ -73,6 +89,15 @@ for iter=1:maxIter
                 
                 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
                 % YOUR CODE HERE
+                
+                parent_dataset = squeeze(dataset(:,parent,:));
+                parent_dataset = [parent_dataset(:,1:2) sin(parent_dataset(:,3)) cos(parent_dataset(:,3)) ];
+                
+                
+                [P.clg(i).gamma(k,[2:5 1]) P.clg(i).sigma_y(k)] = FitLinearGaussianParameters(dataset(:,i,1), parent_dataset, ClassProb(:,k));
+                [P.clg(i).gamma(k,[7:10 6]) P.clg(i).sigma_x(k)] = FitLinearGaussianParameters(dataset(:,i,2), parent_dataset, ClassProb(:,k));
+                [P.clg(i).gamma(k,[12:14 11]) P.clg(i).sigma_angle(k)] = FitLinearGaussianParameters(dataset(:,i,3), squeeze(dataset(:,parent,:)), ClassProb(:,k));
+
                 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
                 
             end
