@@ -22,6 +22,14 @@ logProb = zeros(1, K);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % YOUR CODE HERE
+
+
+
+logProb = log(P.c);
+
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -47,18 +55,39 @@ for i=1:10 % for each body part
             
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % YOUR CODE HERE
+            
+            
+            
+            log_p_y = log(normpdf( pose(i, k), P.clg(i).mu_y(k), P.clg(i).sigma_y(k)^2    )     );
+            log_p_x = log(normpdf( pose(i, k), P.clg(i).mu_x(k), P.clg(i).sigma_x(k)^2    )     );
+            log_p_angle = log(normpdf( pose(i, k), P.clg(i).mu_angle(k), P.clg(i).sigma_angle(k)^2    )     );
+            
+            
+            logProb(k) = logProb(k) +  log_p_y + log_p_x + log_p_angle;
+               
+            
+            
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%
  
         elseif choice == 1 % parametrized by (5),(6),(7)
 
              %%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % YOUR CODE HERE
+            
+            
+            
+            
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
         elseif choice == 2 % parametrized by (8),(9),(10)
 
              %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            % YOUR CODE HERE
+             % YOUR CODE HERE
+             
+             
+             
+             
+            
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
         end
