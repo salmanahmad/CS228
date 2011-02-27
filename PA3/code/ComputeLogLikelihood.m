@@ -15,18 +15,20 @@ loglikelihood = 1;
 
 % YOUR CODE HERE
 
-for i = 1:N,
-    
-    x = 0;
-   for j = 1:K,
-       x = x + exp(logProb(i,j));
-   end;
-   
-    loglikelihood = loglikelihood * x;
+loglikelihood = sum(log(sum(exp(logProb)')));
 
-   
-end;
-
-loglikelihood = log(loglikelihood);
-
-i = 5;
+% for i = 1:N,
+%     
+%     x = 0;
+%    for j = 1:K,
+%        x = x + exp(logProb(i,j));
+%    end;
+%    
+%     loglikelihood = loglikelihood * x;
+% 
+%    
+% end;
+% 
+% loglikelihood = log(loglikelihood);
+% 
+% i = 5;
