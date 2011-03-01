@@ -24,6 +24,13 @@ for i=1:10
         % YOUR CODE HERE
         %%%%%%%%%%%%%%%%%%%%%%%%%%%
         
+        iData = [squeeze(dataset(:,i,:)) sin(squeeze(dataset(:,i,3))) cos(squeeze(dataset(:,i,3)))];
+        jData = [squeeze(dataset(:,j,:)) sin(squeeze(dataset(:,j,3))) cos(squeeze(dataset(:,j,3)))];
+        
+        W(i,j) = GaussianMutualInformation(iData, jData);
+        
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%
+        
     end
 end
 
