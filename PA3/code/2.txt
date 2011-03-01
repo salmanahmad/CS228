@@ -1,0 +1,1 @@
+No, since we do not know the actual number of class labels in the new dataset, we could be overfitting by using the model with 10 classes. As noted in lecture and in the book, an increased log-likelihood for the training data does not necessarily imply an increased generalized performance for the model (log-likelihoods for test datasets).
