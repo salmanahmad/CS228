@@ -20,19 +20,16 @@ I = 0;
 % YOUR CODE HERE
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Sigma_XX = cov(X,X)
-Sigma_XY = cov(X,Y)
-Sigma_YY = cov(Y,Y)
-
-Sigma = [Sigma_XX, Sigma_XY;
-         Sigma_XY, Sigma_YY]
+Sigma_XX = cov(X);
+Sigma_YY = cov(Y);
+Sigma = cov([X Y]);
          
-detSigma_XX = det(Sigma_XX)
-detSigma_YY = det(Sigma_YY)
-detSigma = det(Sigma)
+detSigma_XX = det(Sigma_XX);
+detSigma_YY = det(Sigma_YY);
+detSigma = det(Sigma);
 
-twoI = log( detSigma_XX * detSigma_YY / detSigma )
+twoI = log( detSigma_XX * detSigma_YY / detSigma );
 
-I = 1 / 2 * log( detSigma_XX * detSigma_YY / detSigma )
+I = 1 / 2 * log( detSigma_XX * detSigma_YY / detSigma );
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
