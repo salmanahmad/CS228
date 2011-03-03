@@ -1,3 +1,10 @@
+
+
+
+
+data_directory = 'gestures_v1/';
+
+               
 fd = fopen('gestures_v1/track_high_kick_00.log');
 
 data = [];
