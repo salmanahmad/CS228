@@ -13,7 +13,7 @@ function [ processed_data, raw_data ] = GestureGetAllData
     
     % number of samples, 20 (joints)
 
-    data_directory = 'gestures_v1';
+    data_directory = 'gestures';
 
 
     for i = 1:length(gesture_class_labels),
