@@ -14,17 +14,13 @@ function [ tau ] = DTW(y, z_average, z_standard_deviation, tau_probability_param
         return;
     end
     
-    
     tau = zeros(1, length(y));
     q = zeros(length(y), length(z_average));
-    
-       
     
     q(1, 1) = log(normpdf(y(1), z_average(1), z_standard_deviation(1))) + log(1);
     q(1, 2:length(z_average)) = log(0);
     tau(1) = 1;
      
-    
     
     for s = 2:length(y) 
         
