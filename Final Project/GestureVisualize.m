@@ -52,6 +52,12 @@ edges(17,18) = 1;
 
 
 
+
+
+j = 1;
+
+frames = [];
+
 for i = 1:size(gesture,1),
     
     x = [];
@@ -74,24 +80,30 @@ for i = 1:size(gesture,1),
 
     clf;
     axis([-1,1,-1,1])
+    
+    set(gca,'NextPlot','replacechildren');
     hold on;
     for a = 1:size(edges,1),
         for b = a:size(edges,2),
             if(edges(a,b) == 1),
-                
                 plot3([x(a) x(b)],[y(a) y(b)],[z(a) z(b)]);
-                
             end;
         end;
     end;
     
     hold off;
     
+    
     %scatter3(x,y,z);
-    pause(1/frame_rate);
+    frames = [frames getframe];
+    j = j + 1;
+    %pause(1/frame_rate);
+    
     
 end;
 
+
+movie2avi(frames, 'output.avi', 'fps', 30);
 
 end
 
