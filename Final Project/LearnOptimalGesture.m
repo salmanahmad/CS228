@@ -4,12 +4,12 @@ function [ optimal_gesture ] = LearnOptimalGesture( training_examples )
     % Configuration Constants
     
     NumberOfTrackingPoints = 20;
-    
+    MaximumTauStepSize = 3;
     
     
     
     % Coding style: All variables that are used in the paper
-    % shoudl be referenced with a capital letter. We can give them
+    % should be referenced with a capital letter. We can give them
     % better semantic names at the end of the functions if needed.
 
     Ys = training_examples;
@@ -17,7 +17,7 @@ function [ optimal_gesture ] = LearnOptimalGesture( training_examples )
     
     
     
-    % Compute the size of the optimial gesture
+    % Compute the size of the optimal gesture
     
     T = 0;
     
@@ -43,13 +43,16 @@ function [ optimal_gesture ] = LearnOptimalGesture( training_examples )
     sigma_Delta = eye();
     
     
+    % initial tau probability params, d
+    d = ones(1,MaximumTauStepSize) / MaximumTauStepSize;
     
+    % initial, evenly-spaced taus
+    taus = cell(1,length(Ys));
+    for i = 1:length(Ys),
+        taus(i) = {zeros(1,length(Ys{i}))};
+    end;
     
-    % Omegas
-    
-    
-    
-    
+    taus
     
     
     optimal_gesture = Z;

@@ -1,5 +1,5 @@
 function GestureVisualize( gesture )
-%GESTUREVISUALIZE Summary of this function goes here
+%GestureVisualize Summary of this function goes here
 %   Detailed explanation goes here
 
 
