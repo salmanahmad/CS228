@@ -32,8 +32,9 @@ function [ optimal_gesture taus ] = LearnOptimalGesture( training_examples )
     % TODO - in the future, we may need to change the 3. We are
     % hard coding the the fact that x,y,z are 3 values...
     Z = zeros(T, NumberOfTrackingPoints, 3);
-   
-    
+    Z_means = zeros(T, NumberOfTrackingPoints, 3);
+    Z_counts = zeros(T, NumberOfTrackingPoints, 3);
+    Z_variance = zeros(T, NumberOfTrackingPoints, 3);
     
     
     
@@ -56,9 +57,30 @@ function [ optimal_gesture taus ] = LearnOptimalGesture( training_examples )
         taus(i) = {tau};
     end;
     
+    
+    for i = 1:length(Ys)
+        Y = Ys{i};
+        tau = taus{i};
+        
+        for j = 1:size(Y,1)
+            sample = Y(j);
+            z_index = tau(j);
+            
+            Z_means(z_index) = Z_means(z_index) + sample;
+            Z_counts(z_index) = Z_counts(z_index) + 1;
+        end
+        
+    end
+    
+    Z_means = Z_means ./ Z_counts;
+    
+    
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % calculate optimal gesture
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    
+    
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     optimal_gesture = Z;
