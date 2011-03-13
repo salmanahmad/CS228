@@ -3,7 +3,7 @@ function GestureVisualize( gesture )
 %   Detailed explanation goes here
 
 
-gesture = cell2mat(gesture);
+%gesture = cell2mat(gesture);
 
 frame_rate = 30;
 
@@ -67,14 +67,20 @@ for i = 1:size(gesture,1),
     points = [x y z];
     
     for j = 1:size(gesture,2),
-        index = mod(j-1, 3);
-        if index == 0,
-            x = [x gesture(i,j)];
-        elseif(index == 1),
-            y = [y gesture(i,j)];
-        elseif(index == 2),
-            z = [z gesture(i,j)];
-        end;
+        
+        
+        x = [x gesture(i,j,1)];
+        y = [y gesture(i,j,2)];
+        z = [z gesture(i,j,3)];
+        
+        %index = mod(j-1, 3);
+        %if index == 0,
+        %    x = [x gesture(i,j)];
+        %elseif(index == 1),
+        %    y = [y gesture(i,j)];
+        %elseif(index == 2),
+        %    z = [z gesture(i,j)];
+        %end;
        
     end
 
@@ -95,15 +101,15 @@ for i = 1:size(gesture,1),
     
     
     %scatter3(x,y,z);
-    frames = [frames getframe];
+    %frames = [frames getframe];
     j = j + 1;
-    %pause(1/frame_rate);
+    pause(1/frame_rate);
     
     
 end;
 
 
-movie2avi(frames, 'output.avi', 'fps', 30);
+%movie2avi(frames, 'output.avi', 'fps', 30);
 
 end
 

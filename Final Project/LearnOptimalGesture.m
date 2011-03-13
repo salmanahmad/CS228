@@ -29,7 +29,9 @@ function [ optimal_gesture ] = LearnOptimalGesture( training_examples )
     T = T / length(Ys);
     T = ceil(2 * T);
     
-    Z = zeros(T, NumberOfTrackingPoints);
+    % TODO - in the future, we may need to change the 3. We are
+    % hard coding the the fact that x,y,z are 3 values...
+    Z = zeros(T, NumberOfTrackingPoints, 3);
    
     
     

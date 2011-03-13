@@ -38,7 +38,7 @@ function [ processed_data, raw_data ] = GestureGetAllData
                 numbers = numbers(2:length(numbers))';
     
                 samples(end+1,:,:) = reshape(numbers, 3, 20)';
-                raw_samples(end+1, :, :) = numbers(:);
+                %raw_samples(end+1, :, :) = numbers(:);
             end;
             
                         
@@ -51,7 +51,7 @@ function [ processed_data, raw_data ] = GestureGetAllData
             distances = sqrt(sum_squares);
 
             processed_data(i, j+1) = num2cell(num2cell(distances, 2), 1);
-			raw_data(i, j+1) = {raw_samples};
+			raw_data(i, j+1) = {samples};
 
             
 			fclose('all');
