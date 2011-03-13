@@ -2,20 +2,14 @@ function [ optimal_gesture taus ] = LearnOptimalGesture( training_examples )
 
 
     % Configuration Constants
-    
-    NumberOfTrackingPoints = 20;
     MaximumTauStepSize = 3;
-    
-    
     
     % Coding style: All variables that are used in the paper
     % should be referenced with a capital letter. We can give them
     % better semantic names at the end of the functions if needed.
 
     Ys = training_examples;
-    
-    
-    
+    NumberOfTrackingVariables = size(Ys{1}, 2)
     
     % Compute the size of the optimal gesture
     
@@ -29,17 +23,13 @@ function [ optimal_gesture taus ] = LearnOptimalGesture( training_examples )
     T = T / length(Ys);
     T = ceil(2 * T);
     
-    % TODO - in the future, we may need to change the 3. We are
-    % hard coding the the fact that x,y,z are 3 values...
-    Z = zeros(T, NumberOfTrackingPoints, 3);
-    Z_means = zeros(T, NumberOfTrackingPoints, 3);
-    Z_counts = zeros(T, NumberOfTrackingPoints, 3);
-    Z_variance = zeros(T, NumberOfTrackingPoints, 3);
-    
+    % Initialize Z distribution params...
+    Z_aligned_samples = cell(1,T);
+    Z_means = zeros(T, NumberOfTrackingVariables);
+    Z_variances = zeros(T, NumberOfTrackingVariables);
     
     
     % Covariance matrices
-    
     sigma_Z = eye();
     sigma_Y = eye();
     sigma_Beta = eye();
@@ -48,6 +38,7 @@ function [ optimal_gesture taus ] = LearnOptimalGesture( training_examples )
     
     % initial tau probability params, d
     d = ones(1,MaximumTauStepSize) / MaximumTauStepSize;
+    
     
     % initial, evenly-spaced taus
     taus = cell(1,length(Ys));
@@ -58,31 +49,40 @@ function [ optimal_gesture taus ] = LearnOptimalGesture( training_examples )
     end;
     
     
-    for i = 1:length(Ys)
-        Y = Ys{i};
-        tau = taus{i};
-        
-        for j = 1:size(Y,1)
-            sample = Y(j);
-            z_index = tau(j);
-            
-            Z_means(z_index) = Z_means(z_index) + sample;
-            Z_counts(z_index) = Z_counts(z_index) + 1;
-        end
-        
-    end
-    
-    Z_means = Z_means ./ Z_counts;
-    
-    
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % calculate optimal gesture
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
+    % collect aligned samples
+    for i = 1:length(Ys),
+        Y = Ys{i};
+        tau = taus{i};
+        
+        for j = 1:size(Y,1),
+            sample = Y(j,:);
+            z_index = tau(j);
+            Z_aligned_samples(z_index) = {[ Z_aligned_samples{z_index}; sample ]};
+        end;
+    end;
+    
+    % calculate Z_means and Z_variances
+    for i = 1:length(Z_aligned_samples),
+        Z_means(i,:) = mean(Z_aligned_samples{i});
+        Z_variances(i,:) = var(Z_aligned_samples{i});
+    end;
+    
+    % run dynamic time warping for each training example
+    % TODO: need to update DTW to work for the multi-variate case
+    for i = 1:length(Ys),
+        Y = Ys{i}
+        taus(i) = { DTW(Y, Z_means, sqrt(Z_variances), d) };
+    end;
+    
+    % TODO: update estimate of d from taus
     
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-    optimal_gesture = Z;
+    optimal_gesture = Z_means;
     
 end
