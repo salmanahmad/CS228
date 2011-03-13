@@ -4,10 +4,11 @@ clear all
 
 [p r] = GestureGetDataByLabel('high_kick');
 
-optimal_gesture = LearnOptimalGesture(r);
+[optimal_gesture alignment_indices] = LearnOptimalGesture(r);
 
-size(p)
-size(r)
+p
+r
 size(optimal_gesture)
+alignment_indices
 
 %GestureVisualize(optimal_gesture);

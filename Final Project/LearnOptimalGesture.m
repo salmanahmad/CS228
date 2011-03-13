@@ -1,4 +1,4 @@
-function [ optimal_gesture ] = LearnOptimalGesture( training_examples )
+function [ optimal_gesture taus ] = LearnOptimalGesture( training_examples )
 
 
     % Configuration Constants
@@ -49,14 +49,16 @@ function [ optimal_gesture ] = LearnOptimalGesture( training_examples )
     % initial, evenly-spaced taus
     taus = cell(1,length(Ys));
     for i = 1:length(Ys),
-        taus(i) = {zeros(1,length(Ys{i}))};
+        tau = 1:length(Ys{i});
+        tau = ceil( (tau - 1) * (T - 1) / (length(Ys{i}) - 1) ) + 1;
+        taus(i) = {tau};
     end;
     
-    taus
-    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % calculate optimal gesture
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     optimal_gesture = Z;
     
-    
 end
-
