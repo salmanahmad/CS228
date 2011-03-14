@@ -11,4 +11,10 @@ r
 size(optimal_gesture)
 alignment_indices
 
-%GestureVisualize(optimal_gesture);
+% convert to :,20,3 for GestureVisualize
+x = zeros(size(optimal_gesture,1), size(optimal_gesture,2) / 3, 3);
+x(:, :, 1) = optimal_gesture(:, ((1:20) * 3) - 2);
+x(:, :, 2) = optimal_gesture(:, ((1:20) * 3) - 1);
+x(:, :, 3) = optimal_gesture(:, ((1:20) * 3) - 0);
+
+GestureVisualize(x);

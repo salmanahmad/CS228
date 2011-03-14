@@ -4,30 +4,30 @@ function [ tau ] = DTW(y, z_average, z_standard_deviation, tau_probability_param
 %   This is stupid
     
     
-    if(length(z_average) ~= length(z_standard_deviation))
+    if(size(z_average,1) ~= size(z_standard_deviation,1))
         disp 'Error: z_average and z_standard_deviation must be the same length'
         return;
     end
         
-    if(length(z_average) < length(y))
+    if(size(z_average,1) < size(y,1))
         disp 'Error: the z vector must be larger than y'
         return;
     end
     
-    tau = zeros(1, length(y));
-    q = zeros(length(y), length(z_average));
+    tau = zeros(1, size(y,1));
+    q = zeros(size(y,1), size(z_average,1));
     
-    q(1, 1) = log(normpdf(y(1), z_average(1), z_standard_deviation(1))) + log(1);
+    q(1, 1) = sum(log(normpdf(y(1,:), z_average(1,:), z_standard_deviation(1,:)))) + log(1);
     q(1, 2:length(z_average)) = log(0);
     tau(1) = 1;
      
     
-    for s = 2:length(y) 
+    for s = 2:size(y,1) 
         
         maximum_q = -Inf;
         
-        for t = 1:length(z_average)
-            q(s, t) = log(normpdf(y(s), z_average(t), z_standard_deviation(t)));
+        for t = 1:size(z_average,1)
+            q(s, t) = sum(log(normpdf(y(s,:), z_average(t,:), z_standard_deviation(t,:))));
             
             maximum = -Inf;
             for t_prime = 1:t-1

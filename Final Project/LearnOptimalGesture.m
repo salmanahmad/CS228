@@ -49,39 +49,43 @@ function [ optimal_gesture taus ] = LearnOptimalGesture( training_examples )
     end;
     
     
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % calculate optimal gesture
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    for c = 1:10,
     
-    % collect aligned samples
-    for i = 1:length(Ys),
-        Y = Ys{i};
-        tau = taus{i};
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        % calculate optimal gesture
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         
-        for j = 1:size(Y,1),
-            sample = Y(j,:);
-            z_index = tau(j);
-            Z_aligned_samples(z_index) = {[ Z_aligned_samples{z_index}; sample ]};
+        % collect aligned samples
+        for i = 1:length(Ys),
+            Y = Ys{i};
+            tau = taus{i};
+            
+            for j = 1:size(Y,1),
+                sample = Y(j,:);
+                z_index = tau(j);
+                Z_aligned_samples(z_index) = {[ Z_aligned_samples{z_index}; sample ]};
+            end;
         end;
+        
+        % calculate Z_means and Z_variances
+        for i = 1:length(Z_aligned_samples),
+            Z_means(i,:) = mean(Z_aligned_samples{i});
+            Z_variances(i,:) = var(Z_aligned_samples{i});
+        end;
+        
+        % run dynamic time warping for each training example
+        % TODO: need to update DTW to work for the multi-variate case
+        for i = 1:length(Ys),
+            Y = Ys{i};
+            taus(i) = { DTW(Y, Z_means, sqrt(Z_variances), d) };
+        end;
+        
+        % TODO: update estimate of d from taus
+        
+        
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
     end;
-    
-    % calculate Z_means and Z_variances
-    for i = 1:length(Z_aligned_samples),
-        Z_means(i,:) = mean(Z_aligned_samples{i});
-        Z_variances(i,:) = var(Z_aligned_samples{i});
-    end;
-    
-    % run dynamic time warping for each training example
-    % TODO: need to update DTW to work for the multi-variate case
-    for i = 1:length(Ys),
-        Y = Ys{i}
-        taus(i) = { DTW(Y, Z_means, sqrt(Z_variances), d) };
-    end;
-    
-    % TODO: update estimate of d from taus
-    
-    
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     optimal_gesture = Z_means;
     
