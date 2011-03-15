@@ -11,15 +11,13 @@ if nargin < 3,
 end;
 
 
-frame_rate = 30;
-
+frame_rate = 20;
 height = 0;
 
 if multipleGestures 
     count = length(gestures);
     height = ceil(count / 3);
     subplot(height, 3, 1);
-    
 else
     gestures = {gestures};
     
@@ -27,8 +25,6 @@ end
 
 
 frames = [];
-f = figure;
-
 index = 1;
 
 while true
@@ -39,39 +35,37 @@ while true
     
     for i = 1:length(gestures)
         
-        
         if multipleGestures
            subplot(height, 3, i); 
         end
         
         gesture = gestures{i};
+        gesture_index = index;
         
         if size(gesture,1) >= index
             proceed = true;
         else
-            continue;
+            gesture_index = size(gesture,1);
         end
  
         % get x, y, z
         if (ndims(gesture) == 3)
-            x = gesture(index,:,1);
-            y = gesture(index,:,2);
-            z = gesture(index,:,3);
+            x = gesture(gesture_index,:,1);
+            y = gesture(gesture_index,:,2);
+            z = gesture(gesture_index,:,3);
         elseif (ndims(gesture) == 2),
-            x = gesture(index, (1:(end/3)) * 3 - 2);
-            y = gesture(index, (1:(end/3)) * 3 - 1);
-            z = gesture(index, (1:(end/3)) * 3 - 0);
+            x = gesture(gesture_index, (1:(end/3)) * 3 - 2);
+            y = gesture(gesture_index, (1:(end/3)) * 3 - 1);
+            z = gesture(gesture_index, (1:(end/3)) * 3 - 0);
         else
             disp 'Error: make sure input has dimension 2 (interleaved xyz) or 3 (separate xyz)'
             return;
         end;
         
         
-        
         axis([-1,1,-1,1])
         plotFrame(x,y,z);
-
-
+        
         
     end
     
@@ -79,7 +73,7 @@ while true
     
     if (makeAVI),
         % grab frame for AVI export
-        frames = [frames getframe(f)];
+        frames = [frames getframe(gcf)];
     else,
         % delay before next frame
         pause(1/frame_rate);
@@ -98,7 +92,7 @@ end
 
 
 if (makeAVI),
-    movie2avi(frames, 'output.avi', 'fps', 30);
+    movie2avi(frames, 'output.avi', 'fps', frame_rate);
 end;
 
 
