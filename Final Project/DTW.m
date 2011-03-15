@@ -31,11 +31,12 @@ function [ tau ] = DTW(y, z_average, z_standard_deviation, tau_probability_param
     
     for s = 2:size(y,1) 
         
-        maximum_q = -Inf;
+        maximum_q_for_this_s = -Inf;
         
-        for t = tau(s-1)+1:min(tau(s-1)+3,size(z_average,1)),
+        for t = tau(s-1)+1:min(tau(s-1)+length(tau_probability_params),size(z_average,1)),
         
-            C = 5;
+            % TODO: what should C be?
+            C = 20;
             if t > (2 * s) + C || t < (2 * s) - C,
                 continue;
             end;
@@ -43,7 +44,7 @@ function [ tau ] = DTW(y, z_average, z_standard_deviation, tau_probability_param
             q(s, t) = sum(log(0.0000001 + normpdf(y(s,:), z_average(t,:), z_standard_deviation(t,:))));
             
             maximum = -Inf;
-            for t_prime = max(1,t-3):t-1
+            for t_prime = max(1,t-length(tau_probability_params)):t-1
                 value = log(tau_probability(tau_probability_params, t_prime, t));
                 value = value + q(s-1, t_prime);
                 
@@ -66,8 +67,8 @@ function [ tau ] = DTW(y, z_average, z_standard_deviation, tau_probability_param
 %                 sum(log(normpdf(y(s,:), z_average(t,:), z_standard_deviation(t,:))))
 %             end;
 
-            if(q(s,t) > maximum_q) 
-               maximum_q = q(s,t);
+            if(q(s,t) > maximum_q_for_this_s) 
+               maximum_q_for_this_s = q(s,t);
                tau(s) = t;
             end        
         end
