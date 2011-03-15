@@ -11,7 +11,7 @@ if nargin < 3,
 end;
 
 
-frame_rate = 20;
+frame_rate = 15;
 height = 0;
 
 if multipleGestures 

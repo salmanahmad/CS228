@@ -49,7 +49,7 @@ function [ optimal_gesture taus ] = LearnOptimalGesture( training_examples )
     end;
     
     
-    for c = 1:10,
+    for c = 1:100,
         
         disp(sprintf('Iteration %d', c));
         
@@ -79,6 +79,30 @@ function [ optimal_gesture taus ] = LearnOptimalGesture( training_examples )
             Z_means(i,:) = mean(Z_aligned_samples{i});
             Z_variances(i,:) = var(Z_aligned_samples{i});
         end;
+        
+        % Removes NaNs
+        % By definition, n=1 is mapped to the first Z
+        for n=2:size(Z_means, 1)
+           if isnan(Z_means(n, 1))
+               Z_means(n,:) = Z_means(n-1,:);
+               Z_variances(n,:) = Z_variances(n-1,:);
+           end
+        end
+
+        
+        
+        for i = 1:size(Z_means,2) 
+            Z_means(:,i) = smooth(Z_means(:,i), 'lowess');
+        end
+        
+        % rlowess - good but slow and weird legs
+        % lowess - fast and decent
+        % moving - good...
+        
+        
+        
+        
+        %Z_means = smooth(Z_means);
         
         % run dynamic time warping for each training example
         % TODO: need to update DTW to work for the multi-variate case

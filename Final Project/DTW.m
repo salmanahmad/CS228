@@ -13,13 +13,6 @@ function [ tau ] = DTW(y, z_average, z_standard_deviation, tau_probability_param
         return;
     end
     
-    % By definition, n=1 is mapped to the first Z
-    for n=2:size(z_average, 1)
-       if isnan(z_average(n, 1))
-           z_average(n,:) = z_average(n-1,:);
-           z_standard_deviation(n,:) = z_standard_deviation(n-1,:);
-       end
-    end
     
     tau = zeros(1, size(y,1));
     q = zeros(size(y,1), size(z_average,1));

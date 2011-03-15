@@ -4,11 +4,19 @@ clear
 
 [p r] = GestureGetDataByLabel('high_kick');
 
-[optimal_gesture alignment_indices] = LearnOptimalGesture(r);
+new_r = r([1 2 4 5 6]);
 
-% for i = 1:length(alignment_indices),
-%     alignment_indices{i}
-% end;
+aligned_gestures = cell(size(new_r));
+
+[optimal_gesture alignment_indices] = LearnOptimalGesture(new_r);
+
+save alignment
+
+for i = 1:length(alignment_indices),
+    aligned = GestureAlign(new_r{i}, alignment_indices{i}, length(optimal_gesture)); 
+    aligned_gestures(i) = {aligned};
+end;
 
 % GestureVisualize now works for 60x1 or 20x3
-GestureVisualize(optimal_gesture);
+%GestureVisualize(aligned_gestures, true, true);
+GestureVisualize(new_r, true, true);
