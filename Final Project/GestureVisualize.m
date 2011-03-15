@@ -1,7 +1,10 @@
-function GestureVisualize( gesture )
+function GestureVisualize( gesture, makeAVI )
 %GestureVisualize Summary of this function goes here
 %   Detailed explanation goes here
 
+if nargin < 2,
+    makeAVI = false;
+end;
 
 %gesture = cell2mat(gesture);
 
@@ -53,36 +56,24 @@ edges(17,18) = 1;
 
 
 
-
-j = 1;
-
 frames = [];
 
 for i = 1:size(gesture,1),
     
-    x = [];
-    y = [];
-    z = [];
+    % get x, y, z
+    if (ndims(gesture) == 3),
+        x = gesture(i,:,1);
+        y = gesture(i,:,2);
+        z = gesture(i,:,3);
+    else if (ndims(gesture) == 2),
+        x = gesture(i, (1:(end/3)) * 3 - 2);
+        y = gesture(i, (1:(end/3)) * 3 - 1);
+        z = gesture(i, (1:(end/3)) * 3 - 0);
+    else,
+        disp 'Error: make sure input has dimension 2 (interleaved xyz) or 3 (separate xyz)'
+        return;
+    end;
     
-    points = [x y z];
-    
-    for j = 1:size(gesture,2),
-        
-        
-        x = [x gesture(i,j,1)];
-        y = [y gesture(i,j,2)];
-        z = [z gesture(i,j,3)];
-        
-        %index = mod(j-1, 3);
-        %if index == 0,
-        %    x = [x gesture(i,j)];
-        %elseif(index == 1),
-        %    y = [y gesture(i,j)];
-        %elseif(index == 2),
-        %    z = [z gesture(i,j)];
-        %end;
-       
-    end
 
     clf;
     axis([-1,1,-1,1])
@@ -99,17 +90,18 @@ for i = 1:size(gesture,1),
     
     hold off;
     
-    
-    %scatter3(x,y,z);
-    %frames = [frames getframe];
-    j = j + 1;
-    pause(1/frame_rate);
-    
-    
+    if (makeAVI),
+        % grab frame for AVI export
+        frames = [frames getframe];
+    else,
+        % delay before next frame
+        pause(1/frame_rate);
+    end;
 end;
 
-
-%movie2avi(frames, 'output.avi', 'fps', 30);
+if (makeAVI),
+    movie2avi(frames, 'output.avi', 'fps', 30);
+end;
 
 end
 
