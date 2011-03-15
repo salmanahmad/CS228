@@ -9,7 +9,7 @@ function [ optimal_gesture taus ] = LearnOptimalGesture( training_examples )
     % better semantic names at the end of the functions if needed.
 
     Ys = training_examples;
-    NumberOfTrackingVariables = size(Ys{1}, 2)
+    NumberOfTrackingVariables = size(Ys{1}, 2);
     
     % Compute the size of the optimal gesture
     
@@ -50,10 +50,15 @@ function [ optimal_gesture taus ] = LearnOptimalGesture( training_examples )
     
     
     for c = 1:10,
-    
+        
+        disp(sprintf('Iteration %d', c));
+        
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         % calculate optimal gesture
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        
+        % store old taus to check for convergence
+        old_taus = taus;
         
         % collect aligned samples
         for i = 1:length(Ys),
@@ -63,7 +68,9 @@ function [ optimal_gesture taus ] = LearnOptimalGesture( training_examples )
             for j = 1:size(Y,1),
                 sample = Y(j,:);
                 z_index = tau(j);
-                Z_aligned_samples(z_index) = {[ Z_aligned_samples{z_index}; sample ]};
+                if(z_index ~= 0),
+                    Z_aligned_samples(z_index) = {[ Z_aligned_samples{z_index}; sample ]};
+                end;
             end;
         end;
         
@@ -81,7 +88,31 @@ function [ optimal_gesture taus ] = LearnOptimalGesture( training_examples )
         end;
         
         % TODO: update estimate of d from taus
+        totalTransitions = 0;
+        for i = 1:length(taus),
+            tau = taus{i};
+            totalTransitions = totalTransitions + (length(tau) - 1);
+        end;
         
+        for d_index = 1:MaximumTauStepSize,
+            d_count = 0;
+            
+            for i = 1:length(taus),
+                tau = taus{i};
+                d_count = d_count + length(find(tau(2:end) - tau(1:end-1) == d_index));
+            end;
+            
+            d(d_index) = d_count / totalTransitions;
+        end;
+        
+        % check for convergence in taus
+        allSame = true;
+        for i = 1:length(taus),
+            allSame = allSame && all(taus{i} == old_taus{i});
+        end;
+        if allSame,
+            break;
+        end;
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
