@@ -21,6 +21,7 @@ CS228: Probabilistic Graphical Methods - Winter 2011\\
 
 \begin{abstract}
 
+SALMAN:
 
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do 
 tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
@@ -32,23 +33,77 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 \end{abstract}
 
 \section{Introduction}
-Kinect, data, problem setup, main goal (align gestures, why this is necessary).
+
+SALMAN:
+
+Kinect, data, problem setup, main goal (align gestures, why this is necessary for classification).
 
 \section{Related Work}
 
+ANDREW:
+
 Dynamic Time Warping \cite{Listgarten2005}
+
 Learning Control \cite{Coates2008}
+
+Probabilistic Graphical Models: Principles and Techniques \cite{Koller2009}
+
+Dynamic Bayesian Networks: Representation, Inference and Learning \cite{Muphy2002}
+
+Hidden Conditional Random Fields for Gesture Recognition \cite{Wang2006}
+
 
 \section{Graphical Model}
 
+SALMAN:
+
+images of the model before and after dynamic programming approach to DTW
+
+It's an alignment HMM
+
 \section{Algorithm}
+
+ANDREW:
+
+What we did: EM, DTW
+
+Optimizing the algorithm when calculating q(:,:), tau;
+
+Different smoothing
+
+no prior knowledge of optimal trajectory
+
+not using a bias function
+
+Tried different allowed step sizes for d
 
 \section{Results}
 
+SALMAN:
+
+Figures, writeup (we are geniuses).
+
 \section{Discussion and Future Work}
+
+ANDREW:
+
+Why didn't it work very well? Smoothing made things worse.
+
+Use different smoothing
+
+Add prior knowledge of optimal trajectory: can incorporate effects of gravity - don't want things to hang in mid air.
+
+Application to classification problem
+
+Add more data (training data)
+
+Add features to detect particular aspects of gestures.
+
+Detect orientation differences
 
 \section{Conclusion}
 
+SALMAN:
 
 
 %% The file named.bst is a bibliography style file for BibTeX 0.99c
