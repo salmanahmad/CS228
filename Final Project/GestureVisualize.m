@@ -1,4 +1,4 @@
-function GestureVisualize( gestures, multipleGestures, makeAVI )
+function GestureVisualize( gestures, multipleGestures, makeAVI, outputName )
 %GestureVisualize Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -10,14 +10,19 @@ if nargin < 3,
      makeAVI = false;
 end;
 
+if nargin < 4,
+     outputName = 'output.avi';
+end;
+
 
 frame_rate = 15;
 height = 0;
+width = 2;
 
 if multipleGestures 
     count = length(gestures);
-    height = ceil(count / 3);
-    subplot(height, 3, 1);
+    height = ceil(count / width);
+    subplot(height, width, 1);
 else
     gestures = {gestures};
     
@@ -36,7 +41,7 @@ while true
     for i = 1:length(gestures)
         
         if multipleGestures
-           subplot(height, 3, i); 
+           subplot(height, width, i); 
         end
         
         gesture = gestures{i};
@@ -63,7 +68,9 @@ while true
         end;
         
         
-        axis([-1,1,-1,1])
+        %axis([-1,1,-1,1])
+        axis([-1.5,1.5,-1,1.5])
+
         plotFrame(x,y,z);
         
         
@@ -92,7 +99,7 @@ end
 
 
 if (makeAVI),
-    movie2avi(frames, 'output.avi', 'fps', frame_rate);
+    movie2avi(frames, outputName, 'fps', frame_rate);
 end;
 
 

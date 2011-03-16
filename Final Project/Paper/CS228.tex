@@ -21,22 +21,51 @@ CS228: Probabilistic Graphical Methods - Winter 2011\\
 
 \begin{abstract}
 
-SALMAN:
-
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do 
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Gesture recognition gaining interest in many domains. A common issue when
+learning from multiple training gestures is accounting for noise and different
+durations and speeds. This paper presents an algorithm that uses Hidden Markov
+Models to align training gestures and learn the hidden canonical gesture that
+they represent. The algorithm was used to align motion capture data from an
+Xbox Kinect. This paper present initial results along with a discussion of
+current limitations and paths for future work.
 
 \end{abstract}
 
 \section{Introduction}
 
-SALMAN:
+Gesture recognition is becoming increasingly important in many fields from
+gaming to user interface design. Since it is difficult to manually encode
+gestures declaratively, there is a lot of interest in applying learning
+techniques to train a classifier that can recognize gestures from motion
+capture data.
 
-Kinect, data, problem setup, main goal (align gestures, why this is necessary for classification).
+A common problem with this approach is that the training examples are often
+different durations and different speeds. This paper provides an algorithm
+that aligns gestures based on the important actions that take place - e.g. the
+start of a wave or the midpoints in a jump. Additionally, the algorithm
+learns a canonical representation of the gesture that can be used for
+classification of new data.
+
+\begin{figure}
+\begin{centering}
+\includegraphics[width=0.4\columnwidth]{figures/control_points.pdf}
+
+\caption{The location twenty control points that are tracked by the gesture alignment
+algorithm.\label{figure:control_points}}
+
+\end{centering}
+\end{figure}
+
+The algorithm was evaluated using motion capture information from an Xbox
+Kinect. The raw RGBZ output was converted to \emph{(x,y,z)} positions of 20
+different control points on the human body as shown in Figure
+\ref{figure:control_points}. An alignment hidden markov model was then used to
+align the different gestures.
+
+The rest of this paper presents related work in this area, the graphical model
+used to encode the independencies of the data, a discussion of the algorithm,
+results, an analysis of current limitations, and logical areas of future work.
+
 
 \section{Related Work}
 
@@ -55,7 +84,33 @@ Hidden Conditional Random Fields for Gesture Recognition \cite{Wang2006}
 
 \section{Graphical Model}
 
-SALMAN:
+
+\begin{figure}
+\begin{centering}
+\includegraphics[width=0.65\columnwidth]{figures/model_tau_unobserved.pdf}
+
+\caption{The graphical model using for gesture alignment. $X$ represents the
+hidden, ``canonical'' gesture. $Y$ represents the observed gesture from the
+training set. $T$ represents an indexed mapping between the observed gesture
+to the canonical gesture.\label{figure:model_tau_unobserved}}
+
+\end{centering}
+\end{figure}
+
+
+
+\begin{figure}
+\begin{centering}
+\includegraphics[width=0.65\columnwidth]{figures/model_tau_observed.pdf}
+
+\caption{An example graphical model once $T$ has been learned. In this case,
+the second and third frames from the observed gesture maps to the second and
+fifth frame of the canonical gesture. \label{figure:model_tau_observed}}
+
+\end{centering}
+\end{figure}
+
+
 
 images of the model before and after dynamic programming approach to DTW
 
@@ -81,6 +136,49 @@ Tried different allowed step sizes for d
 
 SALMAN:
 
+
+
+
+\begin{figure}
+\begin{centering}
+\includegraphics[width=\columnwidth]{figures/kick_aligned.png}
+
+\vspace{0.1in}
+
+\includegraphics[width=\columnwidth]{figures/kick_unaligned.png}
+
+\caption{Motion capture data of a person performing a kick. Top: Data that has
+been aligned with our algorithm. Bottom: The Original, unaligned data. Both
+images were taken at the same time offset. \label{figure:kick}}
+
+\end{centering}
+\end{figure}
+
+
+
+
+
+\begin{figure}
+\begin{centering}
+\includegraphics[width=\columnwidth]{figures/jump.png}
+
+\caption{A failure case of our implementation. The algorithm does not have
+domain specific information about the dynamics of the real world, for example,
+gravity. The above data was taken from a person jumping. To align the data,
+the algorithm ``freezes'' the person in mid-air when this is obviously
+physically impossible. \label{figure:jump}}
+
+\end{centering}
+\end{figure}
+
+
+
+
+
+
+
+
+
 Figures, writeup (we are geniuses).
 
 \section{Discussion and Future Work}
@@ -103,10 +201,23 @@ Detect orientation differences
 
 \section{Conclusion}
 
-SALMAN:
+This paper presents a method to perform gesture alignment using a Hidden
+Markov Model. The algorithm was shown to be able to align certain gestures and
+learn a canonical gesture. The method was applied to motion capture data that
+was extracted from RGBZ images taken from an Xbox Kinect.
+
+While the findings were some what promising it failed to work on a diverse set
+of gestures. There are obvious areas for future work. First, the model should
+incorporate our prior knowledge of the ideal gesture. For example, it would
+certainly help to encode that during a kick, one of the legs will be
+accelerating while the rest of the body stays still. Second, the algorithm
+should incorporate a dynamics model of the real world. This will allow the
+method to better deal with physical phenomenons like gravity.
 
 
-%% The file named.bst is a bibliography style file for BibTeX 0.99c
+
+
+
 \bibliographystyle{named}
 \bibliography{CS228}
 

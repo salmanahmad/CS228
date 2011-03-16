@@ -2,20 +2,29 @@
 
 clear
 
-[p r] = GestureGetDataByLabel('high_kick');
+[p r] = GestureGetDataByLabel('jump');
 
+new_r = r;
 
+new_r = cell(1, 4);
+new_r(1) = r(3);
+new_r(2) = r(4);
+new_r(3) = r(5);
+new_r(4) = r(6);
 
+%{
 new_r = cell(1, 3);
 
 r1 = r{1};
-new_r(1) = {r1};
-new_r(2) = {r1((1:floor(end/2)) * 2, :)};
+new_r(3) = {r1};
+new_r(1) = {r1((1:floor(end/2)) * 2, :)};
 
 two_thirds_indices = (1:floor(size(r1,1)/3)) * 3;
 two_thirds_indices = unique([two_thirds_indices two_thirds_indices-1]);
-new_r(3) = {r1(two_thirds_indices, :)};
+new_r(2) = {r1(two_thirds_indices, :)};
 
+
+%}
 
 [optimal_gesture alignment_indices] = LearnOptimalGesture(new_r);
 
@@ -32,8 +41,8 @@ end;
 
 %GestureVisualize(optimal_gesture);
 
-GestureVisualize(aligned_gestures, true, false);
-GestureVisualize(new_r, true, false);
+GestureVisualize(aligned_gestures, true, true, 'jump-aligned.avi');
+GestureVisualize(new_r, true, true, 'jump-unaligned.avi');
 
 
 
