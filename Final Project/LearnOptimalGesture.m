@@ -2,7 +2,7 @@ function [ optimal_gesture taus ] = LearnOptimalGesture( training_examples )
 
 
     % Configuration Constants
-    MaximumTauStepSize = 3;
+    MaximumTauStepSize = 35;
     
     % Coding style: All variables that are used in the paper
     % should be referenced with a capital letter. We can give them
@@ -21,7 +21,7 @@ function [ optimal_gesture taus ] = LearnOptimalGesture( training_examples )
     end
     
     T = T / length(Ys);
-    T = ceil(2 * T);
+    T = ceil(1.5 * T);
     
     % Initialize Z distribution params...
     Z_aligned_samples = cell(1,T);
@@ -90,20 +90,19 @@ function [ optimal_gesture taus ] = LearnOptimalGesture( training_examples )
         end
 
         
-        
-        for i = 1:size(Z_means,2) 
-            Z_means(:,i) = smooth(Z_means(:,i), 'lowess');
-        end
-        
+
         % rlowess - good but slow and weird legs
         % lowess - fast and decent
         % moving - good...
+        for i = 1:size(Z_means,2) 
+           % Z_means(:,i) = smooth(Z_means(:,i), 'lowess');
+        end
+        
+
         
         
         
-        
-        %Z_means = smooth(Z_means);
-        
+            
         % run dynamic time warping for each training example
         % TODO: need to update DTW to work for the multi-variate case
         for i = 1:length(Ys),
