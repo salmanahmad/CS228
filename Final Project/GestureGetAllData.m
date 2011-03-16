@@ -22,7 +22,7 @@ function [ processed_data, raw_data ] = GestureGetAllData
 
         for j = 0:last_training_index,
             file_name = sprintf('%s/track_%s_%02d.log', data_directory, label, j);
-
+            
             fd = fopen(file_name);
 
             samples = [];
