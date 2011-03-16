@@ -2,6 +2,7 @@ function [ aligned_gesture ] = GestureAlign(gesture, tau, target_length)
     
     aligned_gesture = zeros(target_length, 60);
     
+    
     truncated_tau = tau(find(tau));
     aligned_gesture(truncated_tau, :) = gesture(1:length(truncated_tau), :); 
     

@@ -4,6 +4,8 @@ clear
 
 [p r] = GestureGetDataByLabel('high_kick');
 
+
+
 new_r = cell(1, 3);
 
 r1 = r{1};

@@ -21,7 +21,7 @@ function [ optimal_gesture taus ] = LearnOptimalGesture( training_examples )
     end
     
     T = T / length(Ys);
-    T = ceil(1.5 * T);
+    T = ceil(2.5 * T);
     
     % Initialize Z distribution params...
     Z_aligned_samples = cell(1,T);
@@ -43,8 +43,8 @@ function [ optimal_gesture taus ] = LearnOptimalGesture( training_examples )
     % initial, evenly-spaced taus
     taus = cell(1,length(Ys));
     for i = 1:length(Ys),
-        tau = 1:length(Ys{i});
-        tau = ceil( (tau - 1) * (T - 1) / (length(Ys{i}) - 1) ) + 1;
+        tau = 1:size(Ys{i},1);
+        tau = ceil( (tau - 1) * (T - 1) / (size(Ys{i},1) - 1) ) + 1;
         taus(i) = {tau};
     end;
     
@@ -110,6 +110,15 @@ function [ optimal_gesture taus ] = LearnOptimalGesture( training_examples )
             taus(i) = { DTW(Y, Z_means, sqrt(Z_variances), d) };
         end;
         
+        %Z_means
+        %Z_variances
+        %sqrt(Z_variances)
+        %d
+        %taus{1}
+        %input ('')
+        
+       
+        
         % TODO: update estimate of d from taus
         totalTransitions = 0;
         for i = 1:length(taus),
@@ -128,6 +137,15 @@ function [ optimal_gesture taus ] = LearnOptimalGesture( training_examples )
             d(d_index) = d_count / totalTransitions;
         end;
         
+        d = d + 0.00001;
+        d = d / sum(d);
+        
+        
+        %d
+        %input('')
+    
+            
+        
         % check for convergence in taus
         allSame = true;
         for i = 1:length(taus),
@@ -142,5 +160,12 @@ function [ optimal_gesture taus ] = LearnOptimalGesture( training_examples )
     end;
     
     optimal_gesture = Z_means;
+    
+    length(optimal_gesture)
+    
+
+
+
+    
     
 end

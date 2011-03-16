@@ -15,7 +15,7 @@ function [ tau ] = DTW(y, z_average, z_standard_deviation, tau_probability_param
     
     
     tau = zeros(1, size(y,1));
-    q = zeros(size(y,1), size(z_average,1));
+    q = zeros(size(y,1), size(z_average,1)) - Inf;
     
     q(1, 1) = sum(log(normpdf(y(1,:), z_average(1,:), z_standard_deviation(1,:)))) + log(1);
     q(1, 2:length(z_average)) = log(0);
@@ -34,7 +34,19 @@ function [ tau ] = DTW(y, z_average, z_standard_deviation, tau_probability_param
                 continue;
             end;
         
-            q(s, t) = sum(log(0.0000001 + normpdf(y(s,:), z_average(t,:), z_standard_deviation(t,:))));
+            q(s, t) = sum(log(0.0000001 + normpdf(y(s,:), z_average(t,:), 0.0000001 + z_standard_deviation(t,:))));
+            
+            if isnan(q(s,t))
+                s
+                t
+                y(s,:)
+                z_average(t,:)
+                z_standard_deviation(t,:)
+                normpdf(y(s,:), z_average(t,:), z_standard_deviation(t,:))
+                log(0.0000001 + normpdf(y(s,:), z_average(t,:), z_standard_deviation(t,:)))
+                sum(log(0.0000001 + normpdf(y(s,:), z_average(t,:), z_standard_deviation(t,:))))
+            end
+
             
             maximum = -Inf;
             for t_prime = max(1,t-length(tau_probability_params)):t-1
@@ -47,6 +59,8 @@ function [ tau ] = DTW(y, z_average, z_standard_deviation, tau_probability_param
             end
             
             q(s,t) = q(s,t) + maximum;
+            
+            
             
 %             if s==7 && t==tau(6)+1,
 %                 s
@@ -67,7 +81,9 @@ function [ tau ] = DTW(y, z_average, z_standard_deviation, tau_probability_param
         end
     end
     
-%    q'
+    
+    %q'
+    %input('hi')
 end
 
 
