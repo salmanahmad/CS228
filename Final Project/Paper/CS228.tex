@@ -12,7 +12,7 @@ Andrew Hershberger
 \{andrew.hershberger, saahmad\}@cs.stanford.edu
 \\\\
 Stanford University\\
-CS228: Probabilistic Graphical Methods - Winter 2011\\
+CS228: Probabilistic Graphical Methods --- Winter 2011\\
 }
 
 \begin{document}
@@ -69,18 +69,32 @@ results, an analysis of current limitations, and logical areas of future work.
 
 \section{Related Work}
 
-ANDREW:
+Koller and Friedman \cite{Koller2009} provide an overview and analysis of
+different approaches to solving sequence labeling problems like gesture
+recognition. The hidden Markov model (HMM), a generative model, presents
+the challenge of modeling a distribution over the observed variables. By
+contrast, the maximum entropy Markov model (MEMM) and conditional random
+field (CRF) are discriminative approaches in which only the conditional
+distribution over the class labels must be modeled, thus avoiding the need to
+model the distribution over the observed variables directly. On the other hand,
+generative models may allow learning with less training data than would be
+required in the discriminative case.
 
-Dynamic Time Warping \cite{Listgarten2005}
+In one gesture recognition project, Wang, et al.\ \cite{Wang2006} employed a
+CRF variant called a hidden conditional random field (HCRF). Their approach,
+however, did not address the issue of dealing with varying length gestures or
+gestures that are compressed or expanded in time during various phases.
 
-Learning Control \cite{Coates2008}
-
-Probabilistic Graphical Models: Principles and Techniques \cite{Koller2009}
-
-Dynamic Bayesian Networks: Representation, Inference and Learning \cite{Muphy2002}
-
-Hidden Conditional Random Fields for Gesture Recognition \cite{Wang2006}
-
+In a related study, Coates, et al.\ \cite{Coates2008} addressed the problem of
+learning an ideal pattern from multiple non-ideal demonstrations. They applied
+an iterative expectation maximization (EM) algorithm for aligning multiple input
+sequences while simultaneously learning the ideal target sequence. Their
+approach interleaved iterations of a Kalman smoother and dynamic time warping.
+The Kalman smoother \cite{Muphy2002} was used to determine the means and
+covariance matrices of the hidden target sequence. The dynamic time warping
+algorithm \cite{Listgarten2005} then determined the highest-likelihood mapping
+of the observed sequences onto the ideal. Eventually this iterative process
+converged producing tremendous results.
 
 \section{Graphical Model}
 
@@ -189,7 +203,8 @@ Why didn't it work very well? Smoothing made things worse.
 
 Use different smoothing
 
-Add prior knowledge of optimal trajectory: can incorporate effects of gravity - don't want things to hang in mid air.
+Add prior knowledge of optimal trajectory: can incorporate effects of gravity
+- don't want things to hang in mid air.
 
 Application to classification problem
 
