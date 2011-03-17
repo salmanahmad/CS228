@@ -80,12 +80,12 @@ model the distribution over the observed variables directly. On the other hand,
 generative models may allow learning with less training data than would be
 required in the discriminative case.
 
-In one gesture recognition project, Wang, et al.\ \cite{Wang2006} employed a
+In one gesture recognition project, Wang et al.\ \cite{Wang2006} employed a
 CRF variant called a hidden conditional random field (HCRF). Their approach,
 however, did not address the issue of dealing with varying length gestures or
 gestures that are compressed or expanded in time during various phases.
 
-In a related study, Coates, et al.\ \cite{Coates2008} addressed the problem of
+In a related study, Coates et al.\ \cite{Coates2008} addressed the problem of
 learning an ideal pattern from multiple non-ideal demonstrations. They applied
 an iterative expectation maximization (EM) algorithm for aligning multiple input
 sequences while simultaneously learning the ideal target sequence. Their
@@ -134,11 +134,24 @@ It's an alignment HMM
 
 ANDREW:
 
-What we did: EM, DTW
+We decided to focus on the alignment HMM subproblem of the larger gesture
+recognition problem. This is a particularly important issue in cases where it is
+important to allow gestures of different speeds or of varying speed to be
+recognized by the system.
+
+We chose to follow the general approach outlined by Coates et al.\ 
+\cite{Coates2008} where smoothing EM steps were interleaved with dynamic
+time warping EM steps. We also did several things differently. First, we used
+a local regression weighted linear least squares smoother. We turned to this
+approach because the Kalman smoother requires a notion of a dynamics
+model that is used to calculate the next state given the current state and noise.
+In our case, generating such a model is infeasible because of the large
+variation in the way different people perform the same gesture. Secondly, we
+also did not incorporate prior knowledge about the ideal gesture. As discussed
+later, such information is a key area for future work to explore what kinds of
+prior knowledge can be incorporated to improve performance.
 
 Optimizing the algorithm when calculating q(:,:), tau;
-
-Different smoothing
 
 no prior knowledge of optimal trajectory
 
