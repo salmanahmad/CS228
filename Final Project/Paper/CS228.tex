@@ -1,6 +1,8 @@
 
 \documentclass{article}
 
+\hyphenation{MATLAB}
+
 % The file ijcai11.sty is the style file for IJCAI-11 (same as ijcai07.sty).
 \usepackage{ijcai11,times,graphicx,amsmath,float,multirow,bbm,amssymb}
 \usepackage{times}
@@ -132,8 +134,6 @@ It's an alignment HMM
 
 \section{Algorithm}
 
-ANDREW:
-
 We decided to focus on the alignment HMM subproblem of the larger gesture
 recognition problem. This is a particularly important issue in cases where it is
 important to allow gestures of different speeds or of varying speed to be
@@ -151,13 +151,69 @@ also did not incorporate prior knowledge about the ideal gesture. As discussed
 later, such information is a key area for future work to explore what kinds of
 prior knowledge can be incorporated to improve performance.
 
+\subsection{Variables and Initialization}
+
+The initialization of our algorithm involves all of the key variables. We initialize
+an empty ideal trajectory $\mathbf{X}$ with length equal to twice the mean of
+the observed training examples $\mathbf{Y}$. Next, an initial mapping is generated to
+map each sample of each training example onto a sample of the ideal gesture.
+This initialization is done by evenly distributing the samples from each training
+sequence over the length of the ideal gesture sequence. The last major step in
+initialization is setting initial values for the parameters $\mathbf{d}$ of the conditional
+probability distribution of the index mapping for a sample given the index
+mapping of the previous sample:
+\begin{equation}
+\mathbb{P}\left(T_{i+1} \mid T_{i}\right) = \left\{\begin{matrix}
+d_{1} & T_{i+1} - T_{i} = 1\\ 
+d_{2} & T_{i+1} - T_{i} = 2\\ 
+%\multicolumn{2}{c}{\vdots} \\ 
+\vdots & \vdots \\ 
+d_{n} & T_{i+1} - T_{i} = n\\ 
+0 & \textup{otherwise}
+\end{matrix}\right.
+\label{tau_dist}
+\end{equation}
+As is common practice, we initialize all of the entries in $d$ to be equal. The
+choice of the maximum allowable step size $n$ from one index mapping to the
+next was set to $3$ in the example we followed. As will be discussed, we explored
+the effects of vary the value of this parameter.
+
+\subsection{Calculating Ideal Gesture}
+
+Instead of using the Kalman smoother to generate the normal distribution parameters
+for each $X_j$, we simply calculated the mean and variance of the corresponding
+$Y_i$ values as given by the current mapping $\mathbf{T}$. Since the mean for each
+$X_j$ is used as the value for the ideal gesture, this unsmoothed result ends up being
+quite choppy. To smooth things out we applied MATLAB's smooth function to our data,
+using a local regression weighted linear least squares smoother. This approach gave
+smoother results, but also led to decreased alignment performance.
+
+\subsection{Calculating Optimal Mappings}
+
+After calculating the new values for the distributions over $\mathbf{X}$, the mappings
+$\mathbf{T}$ are updated. The dynamic time warping algorithm is used for this
+process. The approach uses dynamic programming to efficiently compute the best
+value of $T_i$ for every corresponding $Y_i$. As explained by Coates et al., the
+algorithm can be defined by the following equations:
+\begin{equation}
+\label{qinit}
+\mathcal{Q}\left(1,t\right)=\ell\left(y_1 \mid x_{T_1}, T_1=t\right)+\ell\left(T_1=t\right)
+\end{equation}
+\begin{equation}
+\label{qsubsequent}
+\begin{split}
+&\mathcal{Q}\left(s,t\right) = \ell\left(y_s \mid x_{T_s}, T_s=t\right)+\\
+&\max_{t^\prime}\left[\ell\left(T_s=t\mid T_{s-1}=t^\prime\right)+\mathcal{Q}\left(s-1,t^\prime\right)\right]
+\end{split}
+\end{equation}
+For $s=1$, equation (\ref{qinit}) is used. In this case, all values where $t\neq1$ are
+equal to $-\infty$ and so only the $t=1$ case need be computed.
+
 Optimizing the algorithm when calculating q(:,:), tau;
 
-no prior knowledge of optimal trajectory
-
-not using a bias function
-
 Tried different allowed step sizes for d
+
+\subsection{Convergence}
 
 \section{Results}
 
