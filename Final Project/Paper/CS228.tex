@@ -24,7 +24,7 @@ CS228: Probabilistic Graphical Methods --- Winter 2011\\
 
 \begin{abstract}
 
-Gesture recognition gaining interest in many domains. A common issue when
+Gesture recognition is gaining interest in many domains. A common issue when
 learning from multiple training gestures is accounting for noise and different
 durations and speeds. This paper presents an algorithm that uses Hidden Markov
 Models to align training gestures and learn the hidden canonical gesture that
@@ -62,7 +62,7 @@ alignment algorithm.\label{figure:control_points}}
 The algorithm was evaluated using motion capture information from an Xbox
 Kinect. The raw RGBZ output was converted to \emph{(x,y,z)} positions of 20
 different control points on the human body as shown in Figure
-\ref{figure:control_points}. An alignment hidden markov model was then used to
+\ref{figure:control_points}. An Alignment Hidden Markov Model was then used to
 align the different gestures.
 
 The rest of this paper presents related work in this area, the graphical model
@@ -83,13 +83,13 @@ model the distribution over the observed variables directly. On the other hand,
 generative models may allow learning with less training data than would be
 required in the discriminative case.
 
-In one gesture recognition project, Wang et al.\ \cite{Wang2006} employed a
-CRF variant called a hidden conditional random field (HCRF). Their approach,
+In one gesture recognition project, Wang et al. employed a
+CRF variant called a hidden conditional random field (HCRF) \cite{Wang2006}. Their approach,
 however, did not address the issue of dealing with varying length gestures or
 gestures that are compressed or expanded in time during various phases.
 
-In a related study, Coates et al.\ \cite{Coates2008} addressed the problem of
-learning an ideal pattern from multiple non-ideal demonstrations. They applied
+In a related study, Coates et al. addressed the problem of
+learning an ideal pattern from multiple non-ideal demonstrations \cite{Coates2008}. They applied
 an iterative expectation maximization (EM) algorithm for aligning multiple input
 sequences while simultaneously learning the ideal target sequence. Their
 approach interleaved iterations of a Kalman smoother and dynamic time warping.
@@ -124,8 +124,8 @@ that is used for learning. $\mathbf{T}$ is a mapping variables that indicates
 which frame in $\mathbf{Y}$ is matched to a frame in $\mathbf{Z}$.
 
 The model tries to match the $\mathbf{Y}$ to $\mathbf{Z}$ by searching to see
-which frames in the two gestures form the best match. Frames are matched using a
-dynamic time warping and is described in greater detail in the algorithm section
+which frames in the two gestures form the best match. Frames are matched using
+dynamic time warping. This approach is described in greater detail in the algorithm section
 below. In essence, the dynamic time warping maintains the temporal dependencies
 between the two gestures by only search over a fixed number of frames --- a so
 called \emph{step size}. In figure \ref{figure:model_tau_unobserved} the step
@@ -222,8 +222,7 @@ Instead of using the Kalman smoother to generate the normal distribution paramet
 for each $X_j$, we simply calculated the mean and variance of the corresponding
 $Y_i$ values as given by the current mapping $\mathbf{T}$. Since the mean for each
 $X_j$ is used as the value for the ideal gesture, this unsmoothed result ends up being
-quite choppy. To smooth things out we applied MATLAB's smooth function to our data,
-using a local regression weighted linear least squares smoother. This approach gave
+quite choppy. To smooth things out we applied a local regression weighted linear least squares smoother. This approach gave
 smoother results, but also led to decreased alignment performance.
 
 \subsection{Calculating Optimal Mappings}
@@ -242,7 +241,7 @@ smoother results, but also led to decreased alignment performance.
 \vspace{-0.2in}
 
 \caption{Motion capture data of a person performing a kick. Top: Data that has
-been aligned with our algorithm. Bottom: The Original, unaligned data. Both
+been aligned with our algorithm. Bottom: The original, unaligned data. Both
 images were taken at the same time offset. \label{figure:kick}}
 
 \end{centering}
@@ -319,8 +318,6 @@ current limitations and avenues for future work are provided in the next
 section.
 
 
-
-
 \section{Discussion and Future Work}
 
 For future work, there are several important directions to pursue. The first is to
@@ -349,8 +346,6 @@ for a match. Ultimately, additional issues, like dealing with multiple orientati
 respect to the Kinect device, would need to be addressed as well.
 
 \section{Conclusion}
-
-
 
 
 This paper presents a method to perform gesture alignment using a Hidden
