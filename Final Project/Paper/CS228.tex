@@ -227,6 +227,27 @@ smoother results, but also led to decreased alignment performance.
 
 \subsection{Calculating Optimal Mappings}
 
+
+\begin{figure}
+\begin{centering}
+
+\begin{centering}
+\includegraphics[width=\columnwidth]{figures/kick_aligned.png}	
+\end{centering}
+\begin{centering}
+\includegraphics[width=\columnwidth]{figures/kick_unaligned.png}	
+\end{centering}
+
+\vspace{-0.2in}
+
+\caption{Motion capture data of a person performing a kick. Top: Data that has
+been aligned with our algorithm. Bottom: The Original, unaligned data. Both
+images were taken at the same time offset. \label{figure:kick}}
+
+\end{centering}
+\end{figure}
+
+
 After calculating the new values for the distributions over $\mathbf{X}$, the mappings
 $\mathbf{T}$ are updated. The dynamic time warping algorithm is used for this
 process. The approach uses dynamic programming to efficiently compute the best
@@ -263,40 +284,31 @@ changes to $\mathbf{T}$ from one iteration to the next.
 
 \section{Results}
 
+
+\begin{figure}
+\begin{centering}
+\includegraphics[width=\columnwidth]{figures/jump.png}
+
+\caption{A failure case of our implementation. The algorithm does not have
+domain specific information about the dynamics of the real world, for example,
+gravity. The above data was taken from a person jumping. To align the data,
+the algorithm ``freezes'' the person in mid-air when this is obviously
+physically impossible. \label{figure:jump}}
+
+\end{centering}
+\end{figure}
+
 We ran our algorithm on the data output from an Xbox Kinect. The Kinect outputs
 RGBZ images which are analyzed and broken into 20 control points with
-$\left(x,y,z\right)$ information.
+$\left(x,y,z\right)$ information. The results were obtained using a \textbf{d}
+of size 25 and generally converged within 15 iterations of the EM algorithm.s
 
 Our training corpus consisted of several different types of gestures including:
 clap, flick left, flick right, high kick, low kick, jump, punch, throw, and
 wave. 
 
-
-
-\begin{figure}
-\begin{centering}
-
-\begin{centering}
-\includegraphics[width=\columnwidth]{figures/kick_aligned.png}	
-\end{centering}
-\begin{centering}
-\includegraphics[width=\columnwidth]{figures/kick_unaligned.png}	
-\end{centering}
-
-\vspace{-0.2in}
-
-\caption{Motion capture data of a person performing a kick. Top:
- Data that has
-been aligned with our algorithm. Bottom: The Original, unaligned data. Both
-images were taken at the same time offset. \label{figure:kick}}
-
-\end{centering}
-\end{figure}
-
-
 The algorithm worked well in certain cases. For example, Figure
 \ref{figure:kick} shows a successful case in which a kick was aligned correctly.
-
 
 Unfortunately, the algorithm has several short comings as well. In many cases,
 the learned canonical gesture is very choppy and noisy. Furthermore, there are
@@ -332,18 +344,7 @@ Detect orientation differences
 \section{Conclusion}
 
 
-\begin{figure}
-\begin{centering}
-\includegraphics[width=\columnwidth]{figures/jump.png}
 
-\caption{A failure case of our implementation. The algorithm does not have
-domain specific information about the dynamics of the real world, for example,
-gravity. The above data was taken from a person jumping. To align the data,
-the algorithm ``freezes'' the person in mid-air when this is obviously
-physically impossible. \label{figure:jump}}
-
-\end{centering}
-\end{figure}
 
 This paper presents a method to perform gesture alignment using a Hidden
 Markov Model. The algorithm was shown to be able to align certain gestures and
