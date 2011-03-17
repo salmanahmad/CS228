@@ -1,15 +1,16 @@
 
 \documentclass{article}
 
+
 % The file ijcai11.sty is the style file for IJCAI-11 (same as ijcai07.sty).
 \usepackage{ijcai11,times,graphicx,amsmath,float,multirow,bbm,amssymb}
-\usepackage{times}
+
 
 \title{Gesture Alignment Using Hidden Markov Models}
 \author{
 Andrew Hershberger
 \quad Salman Ahmad \\
-\{andrew.hershberger, saahmad\}@cs.stanford.edu
+\{andrew.hershberger, saahmad\}@stanford.edu
 \\\\
 Stanford University\\
 CS228: Probabilistic Graphical Methods - Winter 2011\\
@@ -84,6 +85,7 @@ Hidden Conditional Random Fields for Gesture Recognition \cite{Wang2006}
 
 \section{Graphical Model}
 
+The algorithm uses an alignment HMM to align observed 
 
 \begin{figure}
 \begin{centering}
@@ -92,7 +94,8 @@ Hidden Conditional Random Fields for Gesture Recognition \cite{Wang2006}
 \caption{The graphical model using for gesture alignment. $X$ represents the
 hidden, ``canonical'' gesture. $Y$ represents the observed gesture from the
 training set. $T$ represents an indexed mapping between the observed gesture
-to the canonical gesture.\label{figure:model_tau_unobserved}}
+to the canonical gesture. The dark nodes are observed.
+\label{figure:model_tau_unobserved}}
 
 \end{centering}
 \end{figure}
@@ -105,7 +108,8 @@ to the canonical gesture.\label{figure:model_tau_unobserved}}
 
 \caption{An example graphical model once $T$ has been learned. In this case,
 the second and third frames from the observed gesture maps to the second and
-fifth frame of the canonical gesture. \label{figure:model_tau_observed}}
+fifth frame of the canonical gesture. The dark nodes are observed.
+\label{figure:model_tau_observed}}
 
 \end{centering}
 \end{figure}
