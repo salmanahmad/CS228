@@ -51,8 +51,8 @@ classification of new data.
 \begin{centering}
 \includegraphics[width=0.4\columnwidth]{figures/control_points.pdf}
 
-\caption{The location twenty control points that are tracked by the gesture alignment
-algorithm.\label{figure:control_points}}
+\caption{The location twenty control points that are tracked by the gesture
+alignment algorithm.\label{figure:control_points}}
 
 \end{centering}
 \end{figure}
@@ -103,49 +103,51 @@ converged producing tremendous results.
 \begin{centering}
 \includegraphics[width=0.65\columnwidth]{figures/model_tau_unobserved.pdf}
 
-\caption{The graphical model using for gesture alignment. $Z$ represents the
-hidden, ``canonical'' gesture. $Y$ represents the observed gesture from the
-training set. $T$ represents an indexed mapping between the observed gesture
-to the canonical gesture. The dark nodes are observed.
-\label{figure:model_tau_unobserved}}
+\caption{The graphical model using for gesture alignment. $\mathbf{Z}$
+represents the hidden, ``canonical'' gesture. $\mathbf{Y}$ represents the
+observed gesture from the training set. $\mathbf{T}$ represents an indexed
+mapping between the observed gesture to the canonical gesture. The dark nodes
+are observed. \label{figure:model_tau_unobserved}}
 
 \end{centering}
 \end{figure}
 
 
 The algorithm uses an alignment HMM to align observed gestures. The graphical
-representation of the model is shown in Figure
-\ref{figure:model_tau_unobserved} and is similar to the model proposed by
-\cite{Coates2008}. The model involves three important variables. $Z$ is the
-ideal, canonical gesture. It is a hidden variables that is learned. $Y$ is one
-of the observed gestures that is used for learning. $T$ is a mapping variables
-that indicates which frame in $Y$ is matched to a frame in $z$.
+representation of the model is shown in Figure \ref{figure:model_tau_unobserved}
+and is similar to the model proposed by \cite{Coates2008}. The model involves
+three important variables. $\mathbf{Z}$ is the ideal, canonical gesture. It is a
+hidden variables that is learned. $\mathbf{Y}$ is one of the observed gestures
+that is used for learning. $\mathbf{T}$ is a mapping variables that indicates
+which frame in $\mathbf{Y}$ is matched to a frame in $\mathbf{Z}$.
 
-The model tries to match the $Y$ to $Z$ by searching to see which frames in the
-two gestures form the best match. Frames are matched using a dynamic time
-warping and is described in greater detail in the algorithm section below. In
-essence, the dynamic time warping maintains the temporal dependencies between
-the two gestures by only search over a fixed number of frames - a so called
-\emph{step size}. In figure \ref{figure:model_tau_unobserved} the step size is
-3; however, in practice we found that larger step sizes close to 25 produced the
-best results for our datasets.
+The model tries to match the $\mathbf{Y}$ to $\mathbf{Z}$ by searching to see
+which frames in the two gestures form the best match. Frames are matched using a
+dynamic time warping and is described in greater detail in the algorithm section
+below. In essence, the dynamic time warping maintains the temporal dependencies
+between the two gestures by only search over a fixed number of frames - a so
+called \emph{step size}. In figure \ref{figure:model_tau_unobserved} the step
+size is 3; however, in practice we found that larger step sizes close to 25
+produced the best results for our datasets.
 
 Once two frames have been matched, the graphical model imposes a restriction
 that prevents frames to be matched out of order as described. For example, if
-frame 20 of $Y$ is matched to frame 30 in $Z$, then the model would prevent any
-frame greater than 20 in $Y$ to be matched to any frame less than 30 in $Z$.
+frame 20 of $\mathbf{Y}$ is matched to frame 30 in $\mathbf{Z}$, then the model
+would prevent any frame greater than 20 in $\mathbf{Y}$ to be matched to any
+frame less than 30 in $\mathbf{Z}$.
 
 As said before, the model encodes two sets of hidden variables, the mapping
-$T$ and the canonical gestures $Z$. The algorithm uses an Estimation
-Maximization approach to solve for both these variables. Once $T$ is known,
-the algorithm attempts to learn $Z$ from $Y$. At this point the graphical
-model has transformed to look like Figure \ref{figure:model_tau_observed}.
+$\mathbf{T}$ and the canonical gestures $\mathbf{Z}$. The algorithm uses an
+Estimation Maximization approach to solve for both these variables. Once
+$\mathbf{T}$ is known, the algorithm attempts to learn $\mathbf{Z}$ from
+$\mathbf{Y}$. At this point the graphical model has transformed to look like
+Figure \ref{figure:model_tau_observed}.
 
 As is evident from Figure \ref{figure:model_tau_unobserved}, the canonical
 gesture will be much longer than the observed training gestures. This is done to
 account for the gestures of different lengths. In practice we found that a good
-length for $z$ is approximately twice as long as the average length of the
-training gestures as shown below:
+length for $\mathbf{Z}$ is approximately twice as long as the average length of
+the training gestures as shown below:
 
 \[
 	|Z| = \frac{2 \cdot \sum_{i}{Y_i}}{|\mathbf{Y}|}
@@ -155,9 +157,9 @@ training gestures as shown below:
 \begin{centering}
 \includegraphics[width=0.63\columnwidth]{figures/model_tau_observed.pdf}
 
-\caption{An example graphical model once $T$ has been learned. In this case,
-the second and third frames from the observed gesture maps to the second and
-fifth frame of the canonical gesture. The dark nodes are observed.
+\caption{An example graphical model once $\mathbf{T}$ has been learned. In this
+case, the second and third frames from the observed gesture maps to the second
+and fifth frame of the canonical gesture. The dark nodes are observed.
 \label{figure:model_tau_observed}}
 
 \end{centering}
@@ -173,12 +175,13 @@ recognition problem. This is a particularly important issue in cases where it is
 important to allow gestures of different speeds or of varying speed to be
 recognized by the system.
 
-We chose to follow the general approach outlined by Coates et al.\ 
-\cite{Coates2008} where smoothing EM steps were interleaved with dynamic
-time warping EM steps. We also did several things differently. First, we used
-a local regression weighted linear least squares smoother. We turned to this
-approach because the Kalman smoother requires a notion of a dynamics
-model that is used to calculate the next state given the current state and noise.
+We chose to follow the general approach outlined by Coates et al.\
+\cite{Coates2008} where smoothing EM steps were interleaved with dynamic time
+warping EM steps. We also did several things differently. First, we used a local
+regression weighted linear least squares smoother. We turned to this approach
+because the Kalman smoother requires a notion of a dynamics model that is used
+to calculate the next state given the current state and noise.
+
 In our case, generating such a model is infeasible because of the large
 variation in the way different people perform the same gesture. Secondly, we
 also did not incorporate prior knowledge about the ideal gesture. As discussed
