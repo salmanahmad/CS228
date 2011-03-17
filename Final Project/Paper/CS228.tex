@@ -195,20 +195,30 @@ Tried different allowed step sizes for d
 
 \section{Results}
 
-SALMAN:
+We ran our algorithm on the data output from an Xbox Kinect. The Kinect outputs
+RGBZ images which are analyzed and broken into 20 control points with
+\emph{(x,y,z)} information.
 
+Our training corpus consisted of several different types of gestures including:
+clap, flick left, flick right, high kick, low kick, jump, punch, throw, and
+wave. 
 
 
 
 \begin{figure}
 \begin{centering}
-\includegraphics[width=\columnwidth]{figures/kick_aligned.png}
 
-\vspace{0.1in}
+\begin{centering}
+\includegraphics[width=\columnwidth]{figures/kick_aligned.png}	
+\end{centering}
+\begin{centering}
+\includegraphics[width=\columnwidth]{figures/kick_unaligned.png}	
+\end{centering}
 
-\includegraphics[width=\columnwidth]{figures/kick_unaligned.png}
+\vspace{-0.2in}
 
-\caption{Motion capture data of a person performing a kick. Top: Data that has
+\caption{Motion capture data of a person performing a kick. Top:
+ Data that has
 been aligned with our algorithm. Bottom: The Original, unaligned data. Both
 images were taken at the same time offset. \label{figure:kick}}
 
@@ -216,31 +226,19 @@ images were taken at the same time offset. \label{figure:kick}}
 \end{figure}
 
 
+The algorithm worked well in certain cases. For example, figure
+\ref{figure:kick} shows a successful case in which a kick was aligned correctly.
+
+
+Unfortunately, the algorithm has several short comings as well. In many cases,
+the learned canonical gesture is very choppy and noisy. Furthermore, there are
+many cases in which the aligned gestures violate physical properties of the
+world. See figure \ref{figure:jump} as an example. A more detailed discussion of
+current limitations and avenues for future work are provided in the next
+section.
 
 
 
-\begin{figure}
-\begin{centering}
-\includegraphics[width=\columnwidth]{figures/jump.png}
-
-\caption{A failure case of our implementation. The algorithm does not have
-domain specific information about the dynamics of the real world, for example,
-gravity. The above data was taken from a person jumping. To align the data,
-the algorithm ``freezes'' the person in mid-air when this is obviously
-physically impossible. \label{figure:jump}}
-
-\end{centering}
-\end{figure}
-
-
-
-
-
-
-
-
-
-Figures, writeup (we are geniuses).
 
 \section{Discussion and Future Work}
 
@@ -261,7 +259,23 @@ Add features to detect particular aspects of gestures.
 
 Detect orientation differences
 
+
+
 \section{Conclusion}
+
+
+\begin{figure}
+\begin{centering}
+\includegraphics[width=\columnwidth]{figures/jump.png}
+
+\caption{A failure case of our implementation. The algorithm does not have
+domain specific information about the dynamics of the real world, for example,
+gravity. The above data was taken from a person jumping. To align the data,
+the algorithm ``freezes'' the person in mid-air when this is obviously
+physically impossible. \label{figure:jump}}
+
+\end{centering}
+\end{figure}
 
 This paper presents a method to perform gesture alignment using a Hidden
 Markov Model. The algorithm was shown to be able to align certain gestures and
