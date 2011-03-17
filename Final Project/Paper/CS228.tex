@@ -150,9 +150,10 @@ account for the gestures of different lengths. In practice we found that a good
 length for $\mathbf{Z}$ is approximately twice as long as the average length of
 the training gestures as shown below:
 
-\[
-	|Z| = \frac{2 \cdot \sum_{i}{Y_i}}{|\mathbf{Y}|}
-\]
+\begin{equation}
+\label{lengthZ}
+|Z| = \frac{2 \cdot \sum_{i}{Y_i}}{|\mathbf{Y}|}
+\end{equation}
 
 \begin{figure}
 \begin{centering}
@@ -229,8 +230,13 @@ smoother results, but also led to decreased alignment performance.
 After calculating the new values for the distributions over $\mathbf{X}$, the mappings
 $\mathbf{T}$ are updated. The dynamic time warping algorithm is used for this
 process. The approach uses dynamic programming to efficiently compute the best
-value of $T_i$ for every corresponding $Y_i$. As explained by Coates et al., the
-algorithm can be defined by the following equations:
+value of $T_i$ for every corresponding $Y_i$. The algorithm starts at the beginning
+of each training sequence and assigns a mapping to each sample, in order. Since
+equation (\ref{tau_dist}) defines the distribution over the allowable steps between
+index mappings, the range of possible next index assignments is limited to the range
+$\left[1,n\right]$. The process then becomes one of maximizing the likelihood of a
+particular index mapping given the previous index mapping. As explained by Coates
+et al., this algorithm can be defined by the following equations:
 \begin{equation}
 \label{qinit}
 \mathcal{Q}\left(1,t\right)=\ell\left(y_1 \mid x_{T_1}, T_1=t\right)+\ell\left(T_1=t\right)
@@ -243,13 +249,17 @@ algorithm can be defined by the following equations:
 \end{split}
 \end{equation}
 For $s=1$, equation (\ref{qinit}) is used. In this case, all values where $t\neq1$ are
-equal to $-\infty$ and so only the $t=1$ case need be computed.
+equal to $-\infty$ and so only the $t=1$ case need be computed. For all subsequent
+values of $s$, equation(\ref{qsubsequent}) can be used. An additional performance
+optimization is achieved here by noting that (again because of the limited step size)
+the only values of $t$ for which $\mathcal{Q}$ needs be computed are those for which
+$t\in\left[T_{s-1}+1,T_{s-1}+n\right]$. A similar optimization can be applied during the
+maximization over $t^\prime$.
 
-Optimizing the algorithm when calculating q(:,:), tau;
-
-Tried different allowed step sizes for d
-
-\subsection{Convergence}
+At the end of the process of assigning new mappings $\mathbf{T}$ to all the training
+sequences, the parameters $\mathbf{d}$ are updated with the new empirical
+distribution from $\mathbf{T}$. The algorithm converges when there are no further
+changes to $\mathbf{T}$ from one iteration to the next.
 
 \section{Results}
 
