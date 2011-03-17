@@ -126,7 +126,7 @@ The model tries to match the $\mathbf{Y}$ to $\mathbf{Z}$ by searching to see
 which frames in the two gestures form the best match. Frames are matched using a
 dynamic time warping and is described in greater detail in the algorithm section
 below. In essence, the dynamic time warping maintains the temporal dependencies
-between the two gestures by only search over a fixed number of frames - a so
+between the two gestures by only search over a fixed number of frames --- a so
 called \emph{step size}. In figure \ref{figure:model_tau_unobserved} the step
 size is 3; however, in practice we found that larger step sizes close to 25
 produced the best results for our datasets.
@@ -232,7 +232,7 @@ $\mathbf{T}$ are updated. The dynamic time warping algorithm is used for this
 process. The approach uses dynamic programming to efficiently compute the best
 value of $T_i$ for every corresponding $Y_i$. The algorithm starts at the beginning
 of each training sequence and assigns a mapping to each sample, in order. Since
-equation (\ref{tau_dist}) defines the distribution over the allowable steps between
+Eq.\ (\ref{tau_dist}) defines the distribution over the allowable steps between
 index mappings, the range of possible next index assignments is limited to the range
 $\left[1,n\right]$. The process then becomes one of maximizing the likelihood of a
 particular index mapping given the previous index mapping. As explained by Coates
@@ -248,9 +248,9 @@ et al., this algorithm can be defined by the following equations:
 &\max_{t^\prime}\left[\ell\left(T_s=t\mid T_{s-1}=t^\prime\right)+\mathcal{Q}\left(s-1,t^\prime\right)\right]
 \end{split}
 \end{equation}
-For $s=1$, equation (\ref{qinit}) is used. In this case, all values where $t\neq1$ are
+For $s=1$, Eq.\ (\ref{qinit}) is used. In this case, all values where $t\neq1$ are
 equal to $-\infty$ and so only the $t=1$ case need be computed. For all subsequent
-values of $s$, equation(\ref{qsubsequent}) can be used. An additional performance
+values of $s$, Eq.\ (\ref{qsubsequent}) can be used. An additional performance
 optimization is achieved here by noting that (again because of the limited step size)
 the only values of $t$ for which $\mathcal{Q}$ needs be computed are those for which
 $t\in\left[T_{s-1}+1,T_{s-1}+n\right]$. A similar optimization can be applied during the
@@ -265,7 +265,7 @@ changes to $\mathbf{T}$ from one iteration to the next.
 
 We ran our algorithm on the data output from an Xbox Kinect. The Kinect outputs
 RGBZ images which are analyzed and broken into 20 control points with
-\emph{(x,y,z)} information.
+$\left(x,y,z\right)$ information.
 
 Our training corpus consisted of several different types of gestures including:
 clap, flick left, flick right, high kick, low kick, jump, punch, throw, and
@@ -294,14 +294,14 @@ images were taken at the same time offset. \label{figure:kick}}
 \end{figure}
 
 
-The algorithm worked well in certain cases. For example, figure
+The algorithm worked well in certain cases. For example, Figure
 \ref{figure:kick} shows a successful case in which a kick was aligned correctly.
 
 
 Unfortunately, the algorithm has several short comings as well. In many cases,
 the learned canonical gesture is very choppy and noisy. Furthermore, there are
 many cases in which the aligned gestures violate physical properties of the
-world. See figure \ref{figure:jump} as an example. A more detailed discussion of
+world. See Figure \ref{figure:jump} as an example. A more detailed discussion of
 current limitations and avenues for future work are provided in the next
 section.
 
