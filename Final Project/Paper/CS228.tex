@@ -322,24 +322,30 @@ section.
 
 \section{Discussion and Future Work}
 
-ANDREW:
+For future work, there are several important directions to pursue. The first is to
+find a better way to smooth the data. One of the strengths of the Kalman
+smoother is that it incorporates a rough notion of knowledge about the
+system dynamics to produce more intelligent smoothing results. In our case,
+as noted earlier, the na\"ive smoothing actually made the alignment results
+worse.
 
-Why didn't it work very well? Smoothing made things worse.
+Part of this improvement involves determining a better way to model the gesture
+dynamics. For example, even incorporating simple things like the effects of gravity
+might keep the ideal gestures from containing pauses where the body frame
+hangs in mid air.
 
-Use different smoothing
+Another approach that might yield fruitful results would be to focus on specific
+gesture features. For example, if the gesture in question is on that only involves the
+left arm, then it might be reasonable to train the model on only those relevant
+data points --- data about the right foot might only degrade the performance of the
+learning algorithm.
 
-Add prior knowledge of optimal trajectory: can incorporate effects of gravity
-- don't want things to hang in mid air.
-
-Application to classification problem
-
-Add more data (training data)
-
-Add features to detect particular aspects of gestures.
-
-Detect orientation differences
-
-
+Eventually, should the performance of the gesture alignment algorithm be
+sufficiently improved, it could be incorporated into an application for gesture
+recognition. As a live data stream was delivered to the algorithm, different
+subsequences could be mapped to the ideal gesture and evaluated to look
+for a match. Ultimately, additional issues, like dealing with multiple orientations with
+respect to the Kinect device, would need to be addressed as well.
 
 \section{Conclusion}
 
